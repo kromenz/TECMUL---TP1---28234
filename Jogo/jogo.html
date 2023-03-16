@@ -43,7 +43,7 @@ var game = new Phaser.Game(config);
 function preload() {
   this.load.spritesheet('carroplayer', 'assets/carro1.png', { frameWidth: 169, frameHeight: 296 });
   this.load.spritesheet('carroinimigo', 'assets/carro2.png', { frameWidth: 176, frameHeight: 291 });
-  this.load.image('carroinimigo2', 'assets/azul.png');
+  this.load.spritesheet('ambuinimiga', 'assets/ambu.png', { frameWidth: 63, frameHeight: 97 });
   this.load.image('sky', 'assets/sky.png');
 }
 
@@ -85,13 +85,13 @@ function update ()
 
     // Movimentar o carro do jogador com as teclas de controle
     if (cursors.up.isDown) {
-        player.setVelocityY(-400)
+        player.setVelocityY(-300)
     } else if (cursors.down.isDown) {
-        player.setVelocityY(400)
+        player.setVelocityY(200)
     } else if (cursors.right.isDown) {
-        player.setVelocityX(350)
+        player.setVelocityX(200)
     } else if (cursors.left.isDown) {
-        player.setVelocityX(-350)
+        player.setVelocityX(-200)
     } else {
         player.setVelocityY(-50);
         player.setVelocityX(0);
@@ -114,30 +114,48 @@ function createCar() {
     var y = (lane * 100)+50;
     // Adicionar o carro inimigo na posição aleatória
     if (c==1){
-        car = cars.create(y, 0, 'carroinimigo');
+        car = cars.create(y, 0, 'ambuinimiga');
+        car.setScale(0.75);
     }else{
-        car = cars.create(y, 0, 'carroinimigo2');
+        car = cars.create(y, 0, 'carroinimigo');
+        car.setScale(0.2);
     }
     car.setVelocityY(200 + (score / 10));
 
-    car.setScale(0.2);
+    
     car.setCollideWorldBounds(true);
     car.setBounce(1);
 
     // Adicionar uma animação para o carro inimigo
     this.anims.create({
-        key: 'move',
+        key: 'move1',
         frames: this.anims.generateFrameNumbers('carroinimigo', { start: 0, end: -1 }),
         frameRate: 10,
         repeat: -1
     });
-    car.play('move');
+    this.anims.create({
+        key: 'move2',
+        frames: this.anims.generateFrameNumbers('ambuinimiga', { start: 0, end: -1 }),
+        frameRate: 10,
+        repeat: -1
+    });
+    if(c==1){  
+        car.play('move2');
+    }else{
+        car.play('move1');
+    }
+    
     
     car.setCollideWorldBounds(false);
 
     // Diminuir o delay do evento de tempo a cada vez que um novo carro é criado
     score += 1;
-    timerEvent.delay = timerEvent.delay - score * 0.99999999;
+    if(score == 50){
+        timerEvent.delay == 500
+    }
+    else{
+    timerEvent.delay = timerEvent.delay - 0.1;
+    }
 }
 
 
