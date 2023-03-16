@@ -59,7 +59,7 @@ function create ()
     player.setScale(0.2);
 
     player.x = 50;
-    player.y = 400;
+    player.y = 550;
 
     // Adicionar os carros inimigos
     cars = this.physics.add.group();
@@ -84,13 +84,13 @@ function update ()
 
     // Movimentar o carro do jogador com as teclas de controle
     if (cursors.up.isDown) {
-        player.setVelocityY(-350)
+        player.setVelocityY(-400)
     } else if (cursors.down.isDown) {
-        player.setVelocityY(350)
+        player.setVelocityY(400)
     } else if (cursors.right.isDown) {
-        player.setVelocityX(400)
+        player.setVelocityX(350)
     } else if (cursors.left.isDown) {
-        player.setVelocityX(-400)
+        player.setVelocityX(-350)
     } else {
         player.setVelocityY(0);
     }
@@ -110,8 +110,8 @@ function createCar() {
     var lane = Phaser.Math.Between(1, 6);
     var y = (lane * 100) - 50;
     // Adicionar o carro inimigo na posição aleatória
-    car = cars.create(750, y, 'carroinimigo');
-    car.setVelocityX(-(200 + (score / 10)));
+    car = cars.create(y, 400, 'carroinimigo');
+    car.setVelocityY(200 + (score / 10));
 
     car.setScale(0.2);
     car.setCollideWorldBounds(true);
