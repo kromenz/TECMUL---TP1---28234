@@ -55,19 +55,16 @@ function create ()
     this.add.image(400, 300, 'sky');
 
     // Adicionar o carro do jogador
-    player = this.physics.add.sprite(400, 500, 'carroplayer');
+    player = this.physics.add.sprite(550, 550, 'carroplayer');
     player.setCollideWorldBounds(true);
     player.setScale(0.2);
-
-    player.x = 550;
-    player.y = 550;
 
 
     // Adicionar os carros inimigos
     cars = this.physics.add.group();
 
     // Adicionar o texto da pontuação
-    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '20px', fill: '#FAA31B' });
 
     // Adicionar as teclas de controle
     cursors = this.input.keyboard.createCursorKeys();
@@ -98,11 +95,16 @@ function update ()
         player.setVelocityX(0);
     }
 
+    if (player.x < 120) {
+        player.x = 120;
+    } else if (player.x > 610) {
+        player.x = 610;
+    }
     // Verificar colisões entre o carro do jogador e os carros inimigos
     this.physics.add.collider(player, cars, gameOver, null, this);
 
     // Atualizar a pontuação
-    scoreText.setText('Score: ' + score);
+    scoreText.setText('Kilometers: ' + score);
     // Acelerar os carros inimigos à medida que o jogo avança
     cars.children.iterate(function (child) {
         child.setVelocityY(200 + (score / 10));
@@ -117,11 +119,13 @@ function createCar() {
     if (c==1){
         car = cars.create(y, 0, 'ambuinimiga');
         car.setScale(0.75);
+        car.setVelocityY(200 + (score / 10));
     }else{
         car = cars.create(y, 0, 'carroinimigo');
         car.setScale(0.2);
+        car.setVelocityY(200 + (score / 10));
     }
-    car.setVelocityY(200 + (score / 10));
+    
 
     
     car.setCollideWorldBounds(true);
@@ -151,8 +155,8 @@ function createCar() {
 
     // Diminuir o delay do evento de tempo a cada vez que um novo carro é criado
     score += 1;
-    if(score == 50){
-        timerEvent.delay == 500
+    if(score > 10){
+        timerEvent.delay == 10
     }
     else{
     timerEvent.delay = timerEvent.delay - 0.1;
