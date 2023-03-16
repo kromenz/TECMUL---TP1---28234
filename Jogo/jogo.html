@@ -55,9 +55,9 @@ function create ()
     this.add.image(400, 300, 'estrada');
 
     // Adicionar o carro do jogador
-    player = this.physics.add.sprite(550, 550, 'carroplayer');
+    player = this.physics.add.sprite(545, 550, 'carroplayer');
     player.setCollideWorldBounds(true);
-    player.setScale(0.2);
+    player.setScale(0.3);
 
 
     // Adicionar os carros inimigos
@@ -95,10 +95,10 @@ function update ()
         player.setVelocityX(0);
     }
 
-    if (player.x < 120) {
-        player.x = 120;
-    } else if (player.x > 610) {
-        player.x = 610;
+    if (player.x < 140) {
+        player.x = 140;
+    } else if (player.x > 660) {
+        player.x = 660;
     }
     // Verificar colisões entre o carro do jogador e os carros inimigos
     this.physics.add.collider(player, cars, gameOver, null, this);
@@ -114,17 +114,40 @@ function createCar() {
     // Escolher uma via aleatória para adicionar o carro inimigo
     var lane = Phaser.Math.Between(1, 6);
     var c = Phaser.Math.Between(1, 10);
-    var y = (lane * 90)+50;
+    var y;
+    switch (lane){
+        case 1:
+            y=160;
+            break;
+        case 2:
+            y=255;
+            break;
+        case 3:
+            y=350;
+            break;
+        case 4:
+            y=450;
+            break;
+        case 5:
+            y=545;
+            break;
+        case 6:
+            y=640;
+            break;
+        
+    } 
+
+    //160 255 350 450 545 640
     var v;
     // Adicionar o carro inimigo na posição aleatória
     if (c==1){
         car = cars.create(y, 0, 'ambuinimiga');
-        car.setScale(0.75);
+        car.setScale(0.85);
         v = Phaser.Math.Between(50, 90);
         car.setVelocityY(v - (score / 10));
     }else{
         car = cars.create(y, 0, 'carroinimigo');
-        car.setScale(0.2);
+        car.setScale(0.3);
         v = Phaser.Math.Between(80, 200);
         car.setVelocityY(v - (score / 10));
     }
@@ -138,13 +161,13 @@ function createCar() {
     this.anims.create({
         key: 'move1',
         frames: this.anims.generateFrameNumbers('carroinimigo', { start: 0, end: -1 }),
-        frameRate: 10,
+        frameRate: 30,
         repeat: -1
     });
     this.anims.create({
         key: 'move2',
         frames: this.anims.generateFrameNumbers('ambuinimiga', { start: 0, end: -1 }),
-        frameRate: 10,
+        frameRate: 30,
         repeat: -1
     });
     if(c==1){  
