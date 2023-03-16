@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head> 
     <meta charset="UTF-8" />
-    <title>Making your first Phaser 3 Game - Part 10</title>
+    <title>Fun Race</title>
     <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
     <style type="text/css">
         body {
@@ -43,6 +43,7 @@ var game = new Phaser.Game(config);
 function preload() {
   this.load.spritesheet('carroplayer', 'assets/carro1.png', { frameWidth: 169, frameHeight: 296 });
   this.load.spritesheet('carroinimigo', 'assets/carro2.png', { frameWidth: 176, frameHeight: 291 });
+  this.load.image('carroinimigo2', 'assets/azul.png');
   this.load.image('sky', 'assets/sky.png');
 }
 
@@ -92,7 +93,8 @@ function update ()
     } else if (cursors.left.isDown) {
         player.setVelocityX(-350)
     } else {
-        player.setVelocityY(0);
+        player.setVelocityY(-50);
+        player.setVelocityX(0);
     }
 
     // Verificar colisões entre o carro do jogador e os carros inimigos
@@ -108,9 +110,14 @@ function update ()
 function createCar() {
     // Escolher uma via aleatória para adicionar o carro inimigo
     var lane = Phaser.Math.Between(1, 6);
+    var c = Phaser.Math.Between(1, 2);
     var y = (lane * 100)+50;
     // Adicionar o carro inimigo na posição aleatória
-    car = cars.create(y, 0, 'carroinimigo');
+    if (c==1){
+        car = cars.create(y, 0, 'carroinimigo');
+    }else{
+        car = cars.create(y, 0, 'carroinimigo2');
+    }
     car.setVelocityY(200 + (score / 10));
 
     car.setScale(0.2);
