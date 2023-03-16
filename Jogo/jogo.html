@@ -115,15 +115,18 @@ function createCar() {
     var lane = Phaser.Math.Between(1, 6);
     var c = Phaser.Math.Between(1, 10);
     var y = (lane * 90)+50;
+    var v;
     // Adicionar o carro inimigo na posição aleatória
     if (c==1){
         car = cars.create(y, 0, 'ambuinimiga');
         car.setScale(0.75);
-        car.setVelocityY(200 + (score / 10));
+        v = Phaser.Math.Between(50, 90);
+        car.setVelocityY(v - (score / 10));
     }else{
         car = cars.create(y, 0, 'carroinimigo');
         car.setScale(0.2);
-        car.setVelocityY(200 + (score / 10));
+        v = Phaser.Math.Between(80, 200);
+        car.setVelocityY(v - (score / 10));
     }
     
 
