@@ -45,6 +45,7 @@
         this.load.spritesheet('carroplayer', 'assets/carro1.png', { frameWidth: 169, frameHeight: 296 });
         this.load.spritesheet('carroinimigo', 'assets/carro2.png', { frameWidth: 176, frameHeight: 291 });
         this.load.spritesheet('ambuinimiga', 'assets/ambu.png', { frameWidth: 63, frameHeight: 97 });
+        this.load.spritesheet('carroinimigo2', 'assets/azul.png', { frameWidth: 61, frameHeight: 88 });
         this.load.image('estrada', 'assets/sky.png');
         }
 
@@ -58,7 +59,7 @@
             // Adicionar o carro do jogador
             player = this.physics.add.sprite(545, 550, 'carroplayer');
             player.setCollideWorldBounds(true);
-            player.setScale(0.3);
+            player.setScale(0.25);
 
 
             // Adicionar os carros inimigos
@@ -77,6 +78,13 @@
                 callbackScope: this,
                 loop: true
             });
+
+            timerEvent2 = this.time.addEvent({
+                delay: 1000,
+                callback: createCar,
+                callbackScope: this,
+                loop: true
+            });
         }
 
         function update ()
@@ -86,11 +94,11 @@
             if (cursors.up.isDown) {
                 player.setVelocityY(-300)
             } else if (cursors.down.isDown) {
-                player.setVelocityY(200)
+                player.setVelocityY(150)
             } else if (cursors.right.isDown) {
-                player.setVelocityX(200)
+                player.setVelocityX(225)
             } else if (cursors.left.isDown) {
-                player.setVelocityX(-200)
+                player.setVelocityX(-225)
             } else {
                 player.setVelocityY(-50);
                 player.setVelocityX(0);
@@ -143,12 +151,17 @@
             // Adicionar o carro inimigo na posição aleatória
             if (c==1){
                 car = cars.create(y, 0, 'ambuinimiga');
-                car.setScale(0.85);
+                car.setScale(0.8);
                 v = Phaser.Math.Between(50, 90);
                 car.setVelocityY(v - (score / 10));
-            }else{
+            } else if (c>1 && c<6) {
                 car = cars.create(y, 0, 'carroinimigo');
-                car.setScale(0.3);
+                car.setScale(0.25);
+                v = Phaser.Math.Between(80, 200);
+                car.setVelocityY(v - (score / 10));
+            } else {
+                car = cars.create(y, 0, 'carroinimigo2');
+                car.setScale(0.8);
                 v = Phaser.Math.Between(80, 200);
                 car.setVelocityY(v - (score / 10));
             }
@@ -160,34 +173,43 @@
 
             // Adicionar uma animação para o carro inimigo
             this.anims.create({
-                key: 'move1',
+                key: 'move2',
                 frames: this.anims.generateFrameNumbers('carroinimigo', { start: 0, end: -1 }),
                 frameRate: 30,
                 repeat: -1
             });
             this.anims.create({
-                key: 'move2',
+                key: 'move3',
+                frames: this.anims.generateFrameNumbers('carroinimigo2', { start: 0, end: -1 }),
+                frameRate: 30,
+                repeat: -1
+            });
+            this.anims.create({
+                key: 'move1',
                 frames: this.anims.generateFrameNumbers('ambuinimiga', { start: 0, end: -1 }),
                 frameRate: 30,
                 repeat: -1
             });
             if(c==1){  
-                car.play('move2');
-            }else{
                 car.play('move1');
+            }else if (c>1 && c<6) {
+                car.play('move2');
+            }else {
+                car.play('move3');
             }
             
             
             car.setCollideWorldBounds(false);
 
             // Diminuir o delay do evento de tempo a cada vez que um novo carro é criado
-            score += 1;
+            score += 0.5;
             if(score > 10){
-                timerEvent.delay == 10
+                timerEvent.delay == 500;
             }
             else{
             timerEvent.delay = timerEvent.delay - 0.1;
             }
+            timerEvent2.delay= 1200;
         }
 
 
