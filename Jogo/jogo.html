@@ -37,8 +37,8 @@
         var cars;
         var timerEvent;
         var score = 0;
+        var gasol = 0;
         var scoreText;
-
         var game = new Phaser.Game(config);
 
         function preload() {
@@ -52,7 +52,7 @@
 
 
         function create ()
-        {
+        {  
             // Adicionar o fundo do jogo
             this.add.image(400, 300, 'estrada');
 
@@ -60,14 +60,13 @@
             player = this.physics.add.sprite(545, 550, 'carroplayer');
             player.setCollideWorldBounds(true);
             player.setScale(0.25);
-
-
+            
             // Adicionar os carros inimigos
             cars = this.physics.add.group();
 
             // Adicionar o texto da pontuação
-            scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '20px', fill: '#FAA31B' });
-
+            scoreText = this.add.text(589, 10, 'score: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'});
+            gas = this.add.text(589, 40, 'gasolina: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'});
             // Adicionar as teclas de controle
             cursors = this.input.keyboard.createCursorKeys();
 
@@ -79,12 +78,15 @@
                 loop: true
             });
 
+            
             timerEvent2 = this.time.addEvent({
                 delay: 1000,
                 callback: createCar,
                 callbackScope: this,
                 loop: true
             });
+            
+             
         }
 
         function update ()
@@ -114,10 +116,15 @@
 
             // Atualizar a pontuação
             scoreText.setText('Kilometers: ' + score);
+            gas.setText('Gasolina: ' + gasol)
             // Acelerar os carros inimigos à medida que o jogo avança
             cars.children.iterate(function (child) {
                 child.setVelocityY(200 + (score / 10));
             });
+            
+           
+            
+
         }
         function createCar() {
             // Escolher uma via aleatória para adicionar o carro inimigo
@@ -127,6 +134,7 @@
             switch (lane){
                 case 1:
                     y=160;
+                    
                     break;
                 case 2:
                     y=255;
@@ -145,6 +153,8 @@
                     break;
                 
             } 
+
+            
 
             //160 255 350 450 545 640
             var v;
@@ -190,6 +200,11 @@
                 frameRate: 30,
                 repeat: -1
             });
+
+            if (lane === 1 || lane === 2 || lane === 3) {
+                car.setFlipX(true);
+            }
+            
             if(c==1){  
                 car.play('move1');
             }else if (c>1 && c<6) {
@@ -201,6 +216,8 @@
             
             car.setCollideWorldBounds(false);
 
+            
+
             // Diminuir o delay do evento de tempo a cada vez que um novo carro é criado
             score += 0.5;
             if(score > 10){
@@ -209,7 +226,15 @@
             else{
             timerEvent.delay = timerEvent.delay - 0.1;
             }
-            timerEvent2.delay= 1200;
+            
+            if (score > 5){
+                timerEvent2.delay= 1200;
+            }
+            else{
+                timerEvent2.delay= 10000000;
+            }
+
+            
         }
 
 
