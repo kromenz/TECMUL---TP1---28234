@@ -1,5 +1,5 @@
 ESSENCIAL:
-background de uma pista com 6 vias, 3 para cada sentido
+background de uma pista com 6 vias, 3 para cada sentido - ✓
 introdução do item do galão de gasolina
 criar a barra de gasolina
 melhor geração de carros
@@ -13,6 +13,6 @@ carros com diferentes velocidades
 tela de start
 tela de escolha de veículo
 introduzir sons
-introduzir extras
+introduzir cheats
 
 
