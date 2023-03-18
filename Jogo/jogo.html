@@ -17,8 +17,8 @@
 
         var config = {
             type: Phaser.AUTO,
-            width: 800,
-            height: 600,
+            width: 1080,
+            height: 720,
             physics: {
                 default: 'arcade',
                 arcade: {
@@ -42,11 +42,11 @@
         var game = new Phaser.Game(config);
 
         function preload() {
-        this.load.spritesheet('carroplayer', 'assets/carro1.png', { frameWidth: 169, frameHeight: 296 });
-        this.load.spritesheet('carroinimigo', 'assets/carro2.png', { frameWidth: 176, frameHeight: 291 });
-        this.load.spritesheet('ambuinimiga', 'assets/ambu.png', { frameWidth: 63, frameHeight: 97 });
-        this.load.spritesheet('carroinimigo2', 'assets/azul.png', { frameWidth: 61, frameHeight: 88 });
-        this.load.image('estrada', 'assets/sky.png');
+            this.load.spritesheet('carroplayer', 'assets/carro1.png', { frameWidth: 169, frameHeight: 296 });
+            this.load.spritesheet('carroinimigo', 'assets/carro2.png', { frameWidth: 176, frameHeight: 291 });
+            this.load.spritesheet('ambuinimiga', 'assets/ambu.png', { frameWidth: 63, frameHeight: 97 });
+            this.load.spritesheet('carroinimigo2', 'assets/azul.png', { frameWidth: 61, frameHeight: 88 });
+            this.load.image('estrada', 'assets/sky.png');
         }
 
 
@@ -54,10 +54,10 @@
         function create ()
         {  
             // Adicionar o fundo do jogo
-            this.add.image(400, 300, 'estrada');
+            this.add.image(540, 360, 'estrada');
 
             // Adicionar o carro do jogador
-            player = this.physics.add.sprite(545, 550, 'carroplayer');
+            player = this.physics.add.sprite(560, 690, 'carroplayer');
             player.setCollideWorldBounds(true);
             player.setScale(0.25);
             
@@ -65,8 +65,8 @@
             cars = this.physics.add.group();
 
             // Adicionar o texto da pontuação
-            scoreText = this.add.text(589, 10, 'score: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'});
-            gas = this.add.text(589, 40, 'gasolina: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'});
+            scoreText = this.add.text(985, 10, 'score: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'});
+            gas = this.add.text(985, 680, 'gasolina: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'});
             // Adicionar as teclas de controle
             cursors = this.input.keyboard.createCursorKeys();
 
@@ -106,17 +106,17 @@
                 player.setVelocityX(0);
             }
 
-            if (player.x < 140) {
-                player.x = 140;
-            } else if (player.x > 660) {
-                player.x = 660;
+            if (player.x < 200) {
+                player.x = 200;
+            } else if (player.x > 900) {
+                player.x = 900;
             }
             // Verificar colisões entre o carro do jogador e os carros inimigos
             this.physics.add.collider(player, cars, gameOver, null, this);
 
             // Atualizar a pontuação
-            scoreText.setText('Kilometers: ' + score);
-            gas.setText('Gasolina: ' + gasol)
+            scoreText.setText('Km: ' + score);
+            gas.setText('Gas: ' + gasol)
             // Acelerar os carros inimigos à medida que o jogo avança
             cars.children.iterate(function (child) {
                 child.setVelocityY(200 + (score / 10));
@@ -131,32 +131,30 @@
             var lane = Phaser.Math.Between(1, 6);
             var c = Phaser.Math.Between(1, 10);
             var y;
+            //252 360 486 612 738 846
             switch (lane){
                 case 1:
-                    y=160;
-                    
+                    y=252;  
                     break;
                 case 2:
-                    y=255;
+                    y=360;
                     break;
                 case 3:
-                    y=350;
+                    y=486;
                     break;
                 case 4:
-                    y=450;
+                    y=612;
                     break;
                 case 5:
-                    y=545;
+                    y=738;
                     break;
                 case 6:
-                    y=640;
+                    y=846;
                     break;
                 
-            } 
+            }        
 
             
-
-            //160 255 350 450 545 640
             var v;
             // Adicionar o carro inimigo na posição aleatória
             if (c==1){
@@ -175,7 +173,6 @@
                 v = Phaser.Math.Between(80, 200);
                 car.setVelocityY(v - (score / 10));
             }
-            
 
             
             car.setCollideWorldBounds(true);
@@ -213,22 +210,19 @@
                 car.play('move3');
             }
             
-            
             car.setCollideWorldBounds(false);
-
-            
-
+ 
             // Diminuir o delay do evento de tempo a cada vez que um novo carro é criado
             score += 0.5;
-            if(score > 10){
+            if(score > 60){
                 timerEvent.delay == 500;
             }
             else{
             timerEvent.delay = timerEvent.delay - 0.1;
             }
             
-            if (score > 5){
-                timerEvent2.delay= 1200;
+            if (score > 30){
+                timerEvent2.delay = 1200;
             }
             else{
                 timerEvent2.delay= 10000000;
