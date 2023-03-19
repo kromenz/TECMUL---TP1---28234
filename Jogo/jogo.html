@@ -15,6 +15,8 @@
 
         <script type="text/javascript">
 
+        var grav;
+
         var config = {
             type: Phaser.AUTO,
             width: 1080,
@@ -40,13 +42,18 @@
         var gasol = 0;
         var scoreText;
         var game = new Phaser.Game(config);
+        var soundPlaying = false;
 
         function preload() {
             this.load.spritesheet('carroplayer', 'assets/carro1.png', { frameWidth: 169, frameHeight: 296 });
             this.load.spritesheet('carroinimigo', 'assets/carro2.png', { frameWidth: 176, frameHeight: 291 });
             this.load.spritesheet('ambuinimiga', 'assets/ambu.png', { frameWidth: 63, frameHeight: 97 });
             this.load.spritesheet('carroinimigo2', 'assets/azul.png', { frameWidth: 61, frameHeight: 88 });
+            this.load.spritesheet('motainimiga', 'assets/mota1.png', { frameWidth: 60, frameHeight: 60 });
             this.load.image('estrada', 'assets/sky.png');
+            this.load.audio('buzina', 'assets/buzina.wav');
+            this.load.audio('acelerar', 'assets/acelerar.mp3');
+
         }
 
 
@@ -59,7 +66,7 @@
             // Adicionar o carro do jogador
             player = this.physics.add.sprite(560, 690, 'carroplayer');
             player.setCollideWorldBounds(true);
-            player.setScale(0.25);
+            player.setScale(0.275);
             
             // Adicionar os carros inimigos
             cars = this.physics.add.group();
@@ -69,6 +76,7 @@
             gas = this.add.text(985, 680, 'gasolina: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'});
             // Adicionar as teclas de controle
             cursors = this.input.keyboard.createCursorKeys();
+            
 
             // Adicionar o evento de tempo para criar novos carros aleatoriamente
             timerEvent = this.time.addEvent({
@@ -78,23 +86,31 @@
                 loop: true
             });
 
-            
             timerEvent2 = this.time.addEvent({
-                delay: 1000,
-                callback: createCar,
-                callbackScope: this,
-                loop: true
+            delay: 100000,
+            callback: createCar,
+            callbackScope: this,
+            loop: true
             });
             
-             
+            
+            
         }
 
         function update ()
         {
+            player.body.allowGravity = false;
+            
 
             // Movimentar o carro do jogador com as teclas de controle
             if (cursors.up.isDown) {
                 player.setVelocityY(-300)
+                if(soundPlaying == false){
+                    this.music = this.sound.add('acelerar', { loop: false });
+                    this.music.play();
+                    soundPlaying = true;
+                }
+            
             } else if (cursors.down.isDown) {
                 player.setVelocityY(150)
             } else if (cursors.right.isDown) {
@@ -104,7 +120,15 @@
             } else {
                 player.setVelocityY(-50);
                 player.setVelocityX(0);
+                soundPlaying = false;
             }
+
+            if (cursors.space.isDown){
+                this.music = this.sound.add('buzina', { loop: false });
+                this.music.play();
+            }
+
+            
 
             if (player.x < 200) {
                 player.x = 200;
@@ -113,107 +137,130 @@
             }
             // Verificar colisões entre o carro do jogador e os carros inimigos
             this.physics.add.collider(player, cars, gameOver, null, this);
-
+            
             // Atualizar a pontuação
-            scoreText.setText('Km: ' + score);
+            scoreText.setText('Km: ' + score.toFixed(1));
             gas.setText('Gas: ' + gasol)
             // Acelerar os carros inimigos à medida que o jogo avança
             cars.children.iterate(function (child) {
                 child.setVelocityY(200 + (score / 10));
+            
             });
+            
+            if (score % 2 === 0 && score !== 0) {
+                this.physics.world.gravity.y += 10;
+            };
             
            
             
 
         }
         function createCar() {
+
+            
             // Escolher uma via aleatória para adicionar o carro inimigo
-            var lane = Phaser.Math.Between(1, 6);
-            var c = Phaser.Math.Between(1, 10);
-            var y;
-            //252 360 486 612 738 846
-            switch (lane){
-                case 1:
-                    y=252;  
-                    break;
-                case 2:
-                    y=360;
-                    break;
-                case 3:
-                    y=486;
-                    break;
-                case 4:
-                    y=612;
-                    break;
-                case 5:
-                    y=738;
-                    break;
-                case 6:
-                    y=846;
-                    break;
+            
+            var transito = Phaser.Math.Between(1, 6);
+            if (transito != 1){
+                var lane = Phaser.Math.Between(1, 6);
+                var c = Phaser.Math.Between(1, 12);
+                var y;
+                //252 360 486 612 738 846
+                switch (lane){
+                    case 1:
+                        y=250;  
+                        break;
+                    case 2:
+                        y=370;
+                        break;
+                    case 3:
+                        y=500;
+                        break;
+                    case 4:
+                        y=620;
+                        break;
+                    case 5:
+                        y=750;
+                        break;
+                    case 6:
+                        y=870;
+                        break;
+                    
+                }        
+
                 
-            }        
+                var v;
+                // Adicionar o carro inimigo na posição aleatória
+                if (c==1){
+                    car = cars.create(y, 0, 'ambuinimiga');
+                    car.setScale(0.875);
+                } else if (c>1 && c<6) {
+                    car = cars.create(y, 0, 'carroinimigo');
+                    car.setScale(0.275);
+                } else if (c>=6 && c<11){
+                    car = cars.create(y, 0, 'carroinimigo2');
+                    car.setScale(0.9);
+                }else{
+                    car = cars.create(y, 0, 'motainimiga');
+                    car.setScale(0.8);
+                }
 
-            
-            var v;
-            // Adicionar o carro inimigo na posição aleatória
-            if (c==1){
-                car = cars.create(y, 0, 'ambuinimiga');
-                car.setScale(0.8);
-                v = Phaser.Math.Between(50, 90);
-                car.setVelocityY(v - (score / 10));
-            } else if (c>1 && c<6) {
-                car = cars.create(y, 0, 'carroinimigo');
-                car.setScale(0.25);
-                v = Phaser.Math.Between(80, 200);
-                car.setVelocityY(v - (score / 10));
-            } else {
-                car = cars.create(y, 0, 'carroinimigo2');
-                car.setScale(0.8);
-                v = Phaser.Math.Between(80, 200);
-                car.setVelocityY(v - (score / 10));
+                
+                car.setCollideWorldBounds(true);
+                car.setBounce(1);
+
+                // Adicionar uma animação para o carro inimigo
+                this.anims.create({
+                    key: 'move2',
+                    frames: this.anims.generateFrameNumbers('carroinimigo', { start: 0, end: -1 }),
+                    frameRate: 30,
+                    repeat: -1
+                });
+                this.anims.create({
+                    key: 'move3',
+                    frames: this.anims.generateFrameNumbers('carroinimigo2', { start: 0, end: -1 }),
+                    frameRate: 30,
+                    repeat: -1
+                });
+                this.anims.create({
+                    key: 'move1',
+                    frames: this.anims.generateFrameNumbers('ambuinimiga', { start: 0, end: -1 }),
+                    frameRate: 30,
+                    repeat: -1
+                });
+                this.anims.create({
+                    key: 'move4',
+                    frames: this.anims.generateFrameNumbers('motainimiga', { start: 0, end: -1 }),
+                    frameRate: 30,
+                    repeat: -1
+                });
+
+                if (lane === 1 || lane === 2 || lane === 3) {
+                    car.setFlipX(true);
+                }
+                
+                if(c==1){  
+                    car.play('move1');
+                }else if (c>1 && c<6) {
+                    car.play('move2');
+                }else if (c>=6 && c<11){
+                    car.play('move3');
+                }else{
+                    car.play('move4');
+                }
+                
+                car.setCollideWorldBounds(false);
             }
-
-            
-            car.setCollideWorldBounds(true);
-            car.setBounce(1);
-
-            // Adicionar uma animação para o carro inimigo
-            this.anims.create({
-                key: 'move2',
-                frames: this.anims.generateFrameNumbers('carroinimigo', { start: 0, end: -1 }),
-                frameRate: 30,
-                repeat: -1
-            });
-            this.anims.create({
-                key: 'move3',
-                frames: this.anims.generateFrameNumbers('carroinimigo2', { start: 0, end: -1 }),
-                frameRate: 30,
-                repeat: -1
-            });
-            this.anims.create({
-                key: 'move1',
-                frames: this.anims.generateFrameNumbers('ambuinimiga', { start: 0, end: -1 }),
-                frameRate: 30,
-                repeat: -1
-            });
-
-            if (lane === 1 || lane === 2 || lane === 3) {
-                car.setFlipX(true);
-            }
-            
-            if(c==1){  
-                car.play('move1');
-            }else if (c>1 && c<6) {
-                car.play('move2');
-            }else {
-                car.play('move3');
-            }
-            
-            car.setCollideWorldBounds(false);
  
             // Diminuir o delay do evento de tempo a cada vez que um novo carro é criado
-            score += 0.5;
+            if (score > 20){
+                score += 0.5;
+            } else if (score > 10) {
+                score += 0.2;
+            } else {
+                score += 0.1;
+            }
+
             if(score > 60){
                 timerEvent.delay == 500;
             }
@@ -221,15 +268,21 @@
             timerEvent.delay = timerEvent.delay - 0.1;
             }
             
-            if (score > 30){
-                timerEvent2.delay = 1200;
+            if(score < 1){
+                timerEvent2.delay == 1000000;
             }
             else{
-                timerEvent2.delay= 10000000;
+            timerEvent2.delay = 1200
             }
 
             
         }
+
+            function createCar2 (){
+                if (score > 1){
+                    createCar
+                }
+            }
 
 
 
