@@ -212,27 +212,41 @@
                         y=870;
                         break;
                     
-                }        
-
+                }
                 
-                 // Verificar se há um carro já ocupando o local onde o novo carro será gerado
+                //Mudar a posição dos carros na lane
+                var lane2 = Phaser.Math.Between(1, 3);
+                var y2;
+                switch(lane2){
+                    case 1:
+                        y2 = 20;
+                        break;
+                    case 2:
+                        y2 = 0;
+                        break;
+                    case 3:
+                        y2 = -20;
+                        break;
+                }
+
+                // Verificar se há um carro já ocupando o local onde o novo carro será gerado
 
                 var v;
                 // Adicionar o carro inimigo na posição aleatória
                 if (c==1){
-                    car = cars.create(y, 0, 'ambuinimiga');
+                    car = cars.create(y+y2, 0, 'ambuinimiga');
                     car.setScale(0.875);
                 } else if (c>1 && c<6) {
-                    car = cars.create(y, 0, 'carroinimigo');
+                    car = cars.create(y+y2, 0, 'carroinimigo');
                     car.setScale(0.275);
                 } else if (c>=6 && c<11){
-                    car = cars.create(y, 0, 'carroinimigo2');
+                    car = cars.create(y+y2, 0, 'carroinimigo2');
                     car.setScale(0.9);
                 }else if (c>=11 && c<13){
-                    car = cars.create(y, 0, 'motainimiga');
+                    car = cars.create(y+y2, 0, 'motainimiga');
                     car.setScale(0.8);
                 }else{
-                    car = cars.create(y, 0, 'camiao');
+                    car = cars.create(y+y2, 0, 'camiao');
                     car.setScale(0.7);
                 }
 
@@ -321,10 +335,6 @@
             GasEvent.delay = dl;
 
         }
-
-
-
-
 
             function gameOver() {
             // Parar o evento de tempo
