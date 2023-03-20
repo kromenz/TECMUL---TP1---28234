@@ -97,6 +97,13 @@
             loop: true
             });
 
+            timerEvent3 = this.time.addEvent({
+            delay: 1500,
+            callback: EventoCarro3,
+            callbackScope: this,
+            loop: true
+            });
+
             scoreEvent = this.time.addEvent({
             delay: 500,
             callback: EventoScore,
@@ -278,7 +285,7 @@
         function EventoCarro3 (){
             if (score > 20){
                 createCar();
-                timerEvent3.delay = 1200
+                timerEvent3.delay = 1500
             } else if (score > 50){
                 timerEvent3 = timerEvent3.delay - 0.1;
             }                
