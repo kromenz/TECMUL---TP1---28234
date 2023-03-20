@@ -2,7 +2,7 @@
 <html lang="en"> 
     <head> 
         <meta charset="UTF-8" />
-        <title>Fun Race</title>
+        <title>Tuga Traffic</title>
         <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
         <style type="text/css">
             canvas {
@@ -44,6 +44,7 @@
         var scoreText;
         var game = new Phaser.Game(config);
         var soundPlaying = false;
+        ordemlane = [0,0,0]
 
         function preload() {
             this.load.spritesheet('carroplayer', 'assets/carro1.png', { frameWidth: 169, frameHeight: 296 });
@@ -56,13 +57,19 @@
             this.load.image('estrada', 'assets/sky.png');
             this.load.audio('buzina', 'assets/buzina.wav');
             this.load.audio('acelerar', 'assets/acelerar.mp3');
+            
+            this.load.image('logo', 'assets/tugatraffic.png');
+            for (var i = 0; i < 500; i++) {
+                this.load.image('logo' + i, 'assets/tugatraffic.png');
+            }
 
         }
 
 
 
         function create ()
-        {  
+        {   //IMAGEM DE PRELOAD DO GAME
+            var logo = this.add.image(400, 300, 'logo');
             // Adicionar o fundo do jogo
             this.add.image(540, 360, 'estrada');
 
@@ -178,14 +185,7 @@
                 child.setVelocityY(200 + (score / 10));
             
             });
-            gasolina.children.iterate(function (child) {
-                child.setVelocityY(100);
-            
-            });
-
-            
-            
-            
+              
             
 
         }
@@ -196,6 +196,7 @@
             var transito = Phaser.Math.Between(1, 6);
             if (transito != 1){
                 var lane = Phaser.Math.Between(1, 6);
+
                 var c = Phaser.Math.Between(1, 14);
                 var y;
                 //252 360 486 612 738 846
@@ -256,7 +257,7 @@
                     car = cars.create(y+y2, 0, 'camiao');
                     car.setScale(0.7);
                 }
-
+                this.physics.add.collider(cars, cars);
                 car.setCollideWorldBounds(true);
                 car.setBounce(1);
                 car.setCollideWorldBounds(false);
@@ -309,6 +310,7 @@
 
         function EventoGas(){
             var lane = Phaser.Math.Between(1, 6);
+
             var y;
             //252 360 486 612 738 846
             switch (lane){
@@ -332,6 +334,7 @@
                     break;
             }
             g = gasolina.create(y, 0, 'gas');
+            g.setVelocityY(50);
             g.setScale(0.1);
             g.setCollideWorldBounds(true);
             g.setBounce(1);
@@ -341,6 +344,10 @@
             var dl= Phaser.Math.Between(6500,16500);
             GasEvent.delay = dl;
 
+        }
+
+        function VerificaLane (l){
+            if(ordemlane[0]==)
         }
 
             function gameOver() {
