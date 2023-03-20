@@ -1,21 +1,4 @@
-<!doctype html> 
-<html lang="en"> 
-    <head> 
-        <meta charset="UTF-8" />
-        <title>Tuga Traffic</title>
-        <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
-        <style type="text/css">
-            canvas {
-                display : block;   
-                margin : auto;
-            }
-        </style>
-    </head>
-    <body>
-
-        <script type="text/javascript">
-
-        var grav;
+var grav;
 
         var config = {
             type: Phaser.AUTO,
@@ -91,7 +74,7 @@
                 percentText.setText(parseInt(value * 100) + '%');
                 progressBar.clear();
                 progressBar.fillStyle(0xffffff, 1);
-                progressBar.fillRect(250, 280, 300 * value, 30);
+                progressBar.fillRect(540, 360, 300 * value, 30);
             });
             
             this.load.on('fileprogress', function (file) {
@@ -430,6 +413,3 @@
             cursors.left.destroy();
             cursors.right.destroy();
         }
-        </script>
-    </body>
-</html>
