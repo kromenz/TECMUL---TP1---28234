@@ -30,6 +30,7 @@ var grav;
 
         function preload() {
             /********* PRELOAD *********/
+            
             var progressBar = this.add.graphics();
             var progressBox = this.add.graphics();
             progressBox.fillStyle(0x222222, 0.8);
@@ -38,8 +39,8 @@ var grav;
             var width = this.cameras.main.width;
             var height = this.cameras.main.height;
             var loadingText = this.make.text({
-                x: width / 2,
-                y: height / 2 - 50,
+                x: 540,
+                y: 220,
                 text: 'Loading...',
                 style: {
                     font: '20px monospace',
@@ -74,7 +75,7 @@ var grav;
                 percentText.setText(parseInt(value * 100) + '%');
                 progressBar.clear();
                 progressBar.fillStyle(0xffffff, 1);
-                progressBar.fillRect(540, 360, 300 * value, 30);
+                progressBar.fillRect(250, 280, 300 * value, 30);
             });
             
             this.load.on('fileprogress', function (file) {
@@ -89,12 +90,13 @@ var grav;
                 assetText.destroy();
             });
             
-            this.load.image('logo', 'assets/tugatraffic.png');
+            this.load.image('logo', 'tugatraffic.png');
             for (var i = 0; i < 500; i++) {
-                this.load.image('Carregando modelos: ' + i, 'assets/tugatraffic.png');
+                this.load.image('logo'+i, 'tugatraffic.png');
             }
+            
             /********* PRELOAD *********/
-
+            
             this.load.spritesheet('carroplayer', 'assets/carro1.png', { frameWidth: 169, frameHeight: 296 });
             this.load.spritesheet('carroinimigo', 'assets/carro2.png', { frameWidth: 176, frameHeight: 291 });
             this.load.spritesheet('ambuinimiga', 'assets/ambu.png', { frameWidth: 63, frameHeight: 97 });
@@ -105,11 +107,12 @@ var grav;
             this.load.image('estrada', 'assets/sky.png');
             this.load.audio('buzina', 'assets/buzina.wav');
             this.load.audio('acelerar', 'assets/acelerar.mp3');
+            
         }
 
         function create ()
         {   //IMAGEM DE PRELOAD DO GAME
-            var logo = this.add.image(540, 360, 'logo');
+            var logo = this.add.image(400, 300, 'logo');
             
             // Adicionar o fundo do jogo
             this.add.image(540, 360, 'estrada');
