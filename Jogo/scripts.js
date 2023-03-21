@@ -14,7 +14,7 @@ var grav;
             scene: {
                 preload: preload,
                 create: create,
-                update: update
+                update: update,
             }
         };
 
@@ -34,7 +34,7 @@ var grav;
             var progressBar = this.add.graphics();
             var progressBox = this.add.graphics();
             progressBox.fillStyle(0x222222, 0.8);
-            progressBox.fillRect(240, 270, 320, 50);
+            progressBox.fillRect(340, 270, 350, 50);
             
             var width = this.cameras.main.width;
             var height = this.cameras.main.height;
@@ -75,7 +75,7 @@ var grav;
                 percentText.setText(parseInt(value * 100) + '%');
                 progressBar.clear();
                 progressBar.fillStyle(0xffffff, 1);
-                progressBar.fillRect(250, 280, 300 * value, 30);
+                progressBar.fillRect(350, 280, 320 * value, 30);
             });
             
             this.load.on('fileprogress', function (file) {
@@ -90,9 +90,9 @@ var grav;
                 assetText.destroy();
             });
             
-            this.load.image('logo', 'tugatraffic.png');
+            
             for (var i = 0; i < 500; i++) {
-                this.load.image('logo'+i, 'tugatraffic.png');
+                this.load.image('Carregando modelo: ' + i, 'tugatraffic.png');
             }
             
             /********* PRELOAD *********/
@@ -142,38 +142,38 @@ var grav;
             });
 
             timerEvent2 = this.time.addEvent({
-            delay: 1200,
-            callback: EventoCarro2,
-            callbackScope: this,
-            loop: true
+                delay: 1200,
+                callback: EventoCarro2,
+                callbackScope: this,
+                loop: true
             });
 
             timerEvent3 = this.time.addEvent({
-            delay: 1500,
-            callback: EventoCarro3,
-            callbackScope: this,
-            loop: true
+                delay: 1500,
+                callback: EventoCarro3,
+                callbackScope: this,
+                loop: true
             });
 
             scoreEvent = this.time.addEvent({
-            delay: 500,
-            callback: EventoScore,
-            callbackScope: this,
-            loop: true
+                delay: 500,
+                callback: EventoScore,
+                callbackScope: this,
+                loop: true
             });
 
             VelocidadeEvent = this.time.addEvent({
-            delay: 1500,
-            callback: EventoVelo,
-            callbackScope: this,
-            loop: true
+                delay: 1500,
+                callback: EventoVelo,
+                callbackScope: this,
+                loop: true
             });
 
             GasEvent = this.time.addEvent({
-            delay: 15000,
-            callback: EventoGas,
-            callbackScope: this,
-            loop: true
+                delay: 15000,
+                callback: EventoGas,
+                callbackScope: this,
+                loop: true
             });
         
             
