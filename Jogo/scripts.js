@@ -29,8 +29,18 @@
         var soundPlaying = false;
 
         function preload() {
-            
-            /********* PRELOAD *********/
+            this.load.spritesheet('carroplayer', 'assets/carro1.png', { frameWidth: 169, frameHeight: 296 });
+            this.load.spritesheet('carroinimigo', 'assets/carro2.png', { frameWidth: 176, frameHeight: 291 });
+            this.load.spritesheet('ambuinimiga', 'assets/ambu.png', { frameWidth: 63, frameHeight: 97 });
+            this.load.spritesheet('carroinimigo2', 'assets/azul.png', { frameWidth: 61, frameHeight: 88 });
+            this.load.spritesheet('motainimiga', 'assets/mota1.png', { frameWidth: 30, frameHeight: 58 });
+            this.load.spritesheet('gas', 'assets/gas.png', { frameWidth: 612, frameHeight: 580 });
+            this.load.spritesheet('camiao', 'assets/camiao.png', { frameWidth: 120, frameHeight: 239 });
+            this.load.image('estrada', 'assets/sky.png');
+            this.load.audio('buzina', 'assets/buzina.wav');
+            this.load.audio('acelerar', 'assets/acelerar.mp3'); 
+
+            /********* loading bar *********/
             var progressBar = this.add.graphics();
             var progressBox = this.add.graphics();
             progressBox.fillStyle(0x222222, 0.8);
@@ -95,24 +105,23 @@
                 this.load.image('Carregando modelo: ' + i, 'tugatraffic.png');
             }
             
-            /********* PRELOAD *********/
-            
-            this.load.spritesheet('carroplayer', 'assets/carro1.png', { frameWidth: 169, frameHeight: 296 });
-            this.load.spritesheet('carroinimigo', 'assets/carro2.png', { frameWidth: 176, frameHeight: 291 });
-            this.load.spritesheet('ambuinimiga', 'assets/ambu.png', { frameWidth: 63, frameHeight: 97 });
-            this.load.spritesheet('carroinimigo2', 'assets/azul.png', { frameWidth: 61, frameHeight: 88 });
-            this.load.spritesheet('motainimiga', 'assets/mota1.png', { frameWidth: 30, frameHeight: 58 });
-            this.load.spritesheet('gas', 'assets/gas.png', { frameWidth: 612, frameHeight: 580 });
-            this.load.spritesheet('camiao', 'assets/camiao.png', { frameWidth: 120, frameHeight: 239 });
-            this.load.image('estrada', 'assets/sky.png');
-            this.load.audio('buzina', 'assets/buzina.wav');
-            this.load.audio('acelerar', 'assets/acelerar.mp3');     
+            /********* loading bar *********/    
             
         }
 
         function create ()
         {   
             this.add.image(400, 300, 'logo');
+            /*TENTEI 
+            this.time.addEvent({
+                delay: 5000,
+                callback: ()=>{
+                    this.add.image(400, 300, 'logo');
+                },
+                loop: true,
+            })
+            */
+            
             // Adicionar o fundo do jogo
             this.add.image(540, 360, 'estrada');
 
@@ -175,7 +184,6 @@
                 loop: true
             });
         
-            
         }
 
         function update ()
@@ -227,6 +235,7 @@
               
             
         }
+
         function createCar() {
 
             // Escolher uma via aleatória para adicionar o carro inimigo
