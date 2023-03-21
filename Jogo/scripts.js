@@ -94,6 +94,7 @@
             for (var i = 0; i < 500; i++) {
                 this.load.image('Carregando modelo: ' + i, 'tugatraffic.png');
             }
+            
             /********* PRELOAD *********/
             
             this.load.spritesheet('carroplayer', 'assets/carro1.png', { frameWidth: 169, frameHeight: 296 });
@@ -105,13 +106,13 @@
             this.load.spritesheet('camiao', 'assets/camiao.png', { frameWidth: 120, frameHeight: 239 });
             this.load.image('estrada', 'assets/sky.png');
             this.load.audio('buzina', 'assets/buzina.wav');
-            this.load.audio('acelerar', 'assets/acelerar.mp3');        
+            this.load.audio('acelerar', 'assets/acelerar.mp3');     
+            
         }
 
         function create ()
-        {   //IMAGEM DE PRELOAD DO GAME
-            var logo = this.add.image(400, 300, 'logo');
-            
+        {   
+            this.add.image(400, 300, 'logo');
             // Adicionar o fundo do jogo
             this.add.image(540, 360, 'estrada');
 
@@ -179,9 +180,8 @@
 
         function update ()
         {
-            player.body.allowGravity = false;
-            
 
+            player.body.allowGravity = false;
             // Movimentar o carro do jogador com as teclas de controle
             if (cursors.up.isDown) {
                 player.setVelocityY(-300)
