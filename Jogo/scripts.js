@@ -1,4 +1,3 @@
-var grav;
 
         var config = {
             type: Phaser.AUTO,
@@ -18,6 +17,7 @@ var grav;
             }
         };
 
+        var grav;
         var player;
         var cars;
         var gasolina;
@@ -29,8 +29,8 @@ var grav;
         var soundPlaying = false;
 
         function preload() {
-            /********* PRELOAD *********/
             
+            /********* PRELOAD *********/
             var progressBar = this.add.graphics();
             var progressBox = this.add.graphics();
             progressBox.fillStyle(0x222222, 0.8);
@@ -90,11 +90,10 @@ var grav;
                 assetText.destroy();
             });
             
-            
+            this.load.image('logo', 'assets/tuggatraffic.png');
             for (var i = 0; i < 500; i++) {
                 this.load.image('Carregando modelo: ' + i, 'tugatraffic.png');
             }
-            
             /********* PRELOAD *********/
             
             this.load.spritesheet('carroplayer', 'assets/carro1.png', { frameWidth: 169, frameHeight: 296 });
@@ -106,8 +105,7 @@ var grav;
             this.load.spritesheet('camiao', 'assets/camiao.png', { frameWidth: 120, frameHeight: 239 });
             this.load.image('estrada', 'assets/sky.png');
             this.load.audio('buzina', 'assets/buzina.wav');
-            this.load.audio('acelerar', 'assets/acelerar.mp3');
-            
+            this.load.audio('acelerar', 'assets/acelerar.mp3');        
         }
 
         function create ()
