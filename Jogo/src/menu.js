@@ -64,7 +64,7 @@ class Menu extends Phaser.Scene {
             assetText.destroy();
         });
         
-        this.load.image('logo', 'assets/tuggatraffic.png');
+        this.load.image('logo', 'assets/tugatraffic.png');
         for (var i = 0; i < 500; i++) {
             this.load.image('Carregando modelo: ' + i, 'tugatraffic.png');
         } 
