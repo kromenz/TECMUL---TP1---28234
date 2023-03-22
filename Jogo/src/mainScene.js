@@ -31,6 +31,7 @@
 
         function preload() {
 
+            
             this.load.spritesheet('carroplayer', 'assets/carro1.png', { frameWidth: 169, frameHeight: 296 });
             this.load.spritesheet('carroinimigo', 'assets/carro2.png', { frameWidth: 176, frameHeight: 291 });
             this.load.spritesheet('ambuinimiga', 'assets/ambu.png', { frameWidth: 63, frameHeight: 97 });
@@ -48,7 +49,7 @@
         {   
             //this.scene.start('menu');
 
-            this.add.image(400, 300, 'logo');
+           logo = this.add.image(400, 300, 'logo');
             /*TENTEI 
             this.time.addEvent({
                 delay: 5000,
