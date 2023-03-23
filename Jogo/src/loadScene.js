@@ -12,6 +12,7 @@ export default class LoadScene extends Phaser.Scene {
         this.load.spritesheet('gas', 'assets/gas.png', { frameWidth: 612, frameHeight: 580 });
         this.load.spritesheet('camiao', 'assets/camiao.png', { frameWidth: 120, frameHeight: 239 });
         this.load.image('estrada', 'assets/sky.png');
+        this.load.image('button', 'assets/spacebar.png');
         this.load.audio('buzina', 'assets/buzina.wav');
         this.load.audio('acelerar', 'assets/acelerar.mp3'); 
         /********* loading bar *********/

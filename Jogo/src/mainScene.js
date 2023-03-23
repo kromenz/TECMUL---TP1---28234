@@ -301,8 +301,8 @@ export default class MainScene extends Phaser.Scene{
         // Parar o evento de tempo
         this.timerEvent.remove(false);
         // Mostrar a mensagem de fim de jogo
-        let gameOverText = this.add.text(540, 360, 'Game Over\nFinal this.score: ' + this.score, { 
-            fontSize: '64px Calibri bold', 
+        const gameOverText = this.add.text(220, 160, 'Game Over\nFinal this.score: '+ this.score + '\nPress space to restart the game' , { 
+            fontSize: '55px Revalia', 
             fill: '#000',
             align: 'center',
             borderColor: '#fff',
@@ -318,8 +318,6 @@ export default class MainScene extends Phaser.Scene{
             shadowColor: '#000',
             shadowBlur: 5
         });
-        
-        gameOverText.setOrigin(0.5);
 
         // Parar a movimentação dos carros
         this.cars.setVelocityY(0);
@@ -329,11 +327,13 @@ export default class MainScene extends Phaser.Scene{
         this.scoreEvent.remove(false);
         this.GasEvent.remove(false);
 
+        const botao = this.add.image(550, 690, 'button');
+        botao.setScale(0.5)
 
+        this.input.keyboard.on('keydown-SPACE', function() {
+            this.scene.start('load');
+        }, this);
     }
 
-    actionOnClick () {
-        this.scene.start('load');
-    }
 
 }
