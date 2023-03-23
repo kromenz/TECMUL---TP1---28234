@@ -301,7 +301,24 @@ export default class MainScene extends Phaser.Scene{
         // Parar o evento de tempo
         this.timerEvent.remove(false);
         // Mostrar a mensagem de fim de jogo
-        let gameOverText = this.add.text(400, 300, 'Game Over\nFinal this.score: ' + this.score, { fontSize: '64px Calibri bold', fill: '#000' });
+        let gameOverText = this.add.text(540, 360, 'Game Over\nFinal this.score: ' + this.score, { 
+            fontSize: '64px Calibri bold', 
+            fill: '#000',
+            align: 'center',
+            borderColor: '#fff',
+            borderWidth: 5,
+            padding: {
+                left: 10,
+                right: 10,
+                top: 5,
+                bottom: 5
+            },
+            shadowOffsetX: 5,
+            shadowOffsetY: 5,
+            shadowColor: '#000',
+            shadowBlur: 5
+        });
+        
         gameOverText.setOrigin(0.5);
 
         // Parar a movimentação dos carros
