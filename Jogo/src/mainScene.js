@@ -298,7 +298,7 @@ export default class MainScene extends Phaser.Scene{
         this.gameOvar = true;
 
         // Mostrar a mensagem de fim de jogo
-        const gameOverText = this.add.text(220, 160, 'Game Over\nFinal this.score: '+ this.score + '\nPress space to restart the game' , { 
+        const gameOverText = this.add.text(220, 160, 'Game Over\nFinal this.score: '+ this.score.toFixed(2) + '\nPress space to restart the game' , { 
             fontSize: '55px Revalia', 
             fill: '#000',
             align: 'center',
@@ -336,7 +336,8 @@ export default class MainScene extends Phaser.Scene{
         botao.setScale(0.5)
         botao.setInteractive();
 
-        botao.on('pointerup', function (event) {this.scene.restart()}, this);
+        //Está a funcionar, mas dá reload ao jogo todo, e o objetivo é a apenas esta cena
+        botao.on('pointerup', function (event) { window.location.reload();}, this);
         /* RESETAR AS VARIÁVEIS PORQUE SENÃO LEVAR RESET NÃO FUNCIONA
         if(botao.on('pointerup', function (event) {this.scene.restart()}, this)){
             this.resetVars();
@@ -345,8 +346,6 @@ export default class MainScene extends Phaser.Scene{
     }
 
     resetVars(){
-        this.gameOvar = false;
-        this.score = 0;
-        this.gasol = 0;
+       
     }
 }
