@@ -3,7 +3,8 @@ export default class MenuScene extends Phaser.Scene {
         super({key : 'menu'});
     }
 
-    spaceKey
+    cursor;
+    spaceKey;
 
     preload(){ 
         this.load.image('logo', 'assets/tugatraffic.png');
@@ -11,20 +12,20 @@ export default class MenuScene extends Phaser.Scene {
 
     create() {
 
-        this.spaceKey = this.input.keyboard.createCursorKey(); 
+        this.cursor = this.input.keyboard.createCursorKeys(); 
         const logo = this.add.image(540, 320, 'logo');
         this.texto();
+        this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         //logo.setDepth(1);
-        this.startGame();
         
 
         //this.scene.start('load');
     }
 
     update(){
-        if(Phaser.Input.Keyboard.JustDown(cursors.space)){
+        if(this.spaceKey.isDown ){
             this.scene.start('load');
-        }    
+        }   
     }
 
     texto(){
