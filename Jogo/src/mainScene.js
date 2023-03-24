@@ -84,8 +84,6 @@ export default class MainScene extends Phaser.Scene{
 
     update (){
         if(this.gameOvar){
-            this.player.setVelocityX(0);
-            this.player.setVelocityY(0);
             return;
         }
 
@@ -298,8 +296,7 @@ export default class MainScene extends Phaser.Scene{
 
     gameOver() {
         this.gameOvar = true;
-        // Parar o evento de tempo
-        this.timerEvent.remove(false);
+
         // Mostrar a mensagem de fim de jogo
         const gameOverText = this.add.text(220, 160, 'Game Over\nFinal this.score: '+ this.score + '\nPress space to restart the game' , { 
             fontSize: '55px Revalia', 
@@ -319,7 +316,15 @@ export default class MainScene extends Phaser.Scene{
             shadowBlur: 5
         });
 
+        this.timerEvent.remove(false);
+        this.timerEvent2.remove(false);
+        this.timerEvent3.remove(false);
+        this.scoreEvent.remove(false);
+        this.GasEvent.remove(false);
+
         // Parar a movimentação dos carros
+        this.player.setVelocityX(0);
+        this.player.setVelocityY(0);
         this.cars.setVelocityY(0);
         this.timerEvent.remove(false);
         this.timerEvent2.remove(false);
@@ -329,11 +334,19 @@ export default class MainScene extends Phaser.Scene{
 
         const botao = this.add.image(550, 690, 'button');
         botao.setScale(0.5)
+        botao.setInteractive();
 
-        this.input.keyboard.on('keydown-SPACE', function() {
-            this.scene.start('load');
-        }, this);
+        botao.on('pointerup', function (event) {this.scene.restart()}, this);
+        /* RESETAR AS VARIÁVEIS PORQUE SENÃO LEVAR RESET NÃO FUNCIONA
+        if(botao.on('pointerup', function (event) {this.scene.restart()}, this)){
+            this.resetVars();
+        }
+        */
     }
 
-
+    resetVars(){
+        this.gameOvar = false;
+        this.score = 0;
+        this.gasol = 0;
+    }
 }
