@@ -336,8 +336,12 @@ export default class MainScene extends Phaser.Scene{
         botao.setScale(0.5)
         botao.setInteractive();
 
+        
         //Está a funcionar, mas dá reload ao jogo todo, e o objetivo é a apenas esta cena
         botao.on('pointerup', function (event) { window.location.reload();}, this);
+        //ESTE NÃO FUNCIONA
+        //this.input.keyboard.on('keydown-SPACE', function (event) {window.location.reload()}, this);
+
         /* RESETAR AS VARIÁVEIS PORQUE SENÃO LEVAR RESET NÃO FUNCIONA
         if(botao.on('pointerup', function (event) {this.scene.restart()}, this)){
             this.resetVars();
