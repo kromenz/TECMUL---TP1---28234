@@ -299,7 +299,7 @@ export default class MainScene extends Phaser.Scene{
 
         // Mostrar a mensagem de fim de jogo
         const gameOverText = this.add.text(220, 160, 'Game Over\nFinal this.score: '+ this.score.toFixed(2) + '\nPress space to restart the game' , { 
-            fontSize: '55px Revalia', 
+            fontSize: '55px Georgia', 
             fill: '#000',
             align: 'center',
             borderColor: '#fff',
@@ -347,9 +347,5 @@ export default class MainScene extends Phaser.Scene{
             this.resetVars();
         }
         */
-    }
-
-    resetVars(){
-       
     }
 }

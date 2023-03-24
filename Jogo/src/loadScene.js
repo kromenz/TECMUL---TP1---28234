@@ -4,17 +4,7 @@ export default class LoadScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.spritesheet('carroplayer', 'assets/carro1.png', { frameWidth: 169, frameHeight: 296 });
-        this.load.spritesheet('carroinimigo', 'assets/carro2.png', { frameWidth: 176, frameHeight: 291 });
-        this.load.spritesheet('ambuinimiga', 'assets/ambu.png', { frameWidth: 63, frameHeight: 97 });
-        this.load.spritesheet('carroinimigo2', 'assets/azul.png', { frameWidth: 61, frameHeight: 88 });
-        this.load.spritesheet('motainimiga', 'assets/mota1.png', { frameWidth: 30, frameHeight: 58 });
-        this.load.spritesheet('gas', 'assets/gas.png', { frameWidth: 612, frameHeight: 580 });
-        this.load.spritesheet('camiao', 'assets/camiao.png', { frameWidth: 120, frameHeight: 239 });
-        this.load.image('estrada', 'assets/sky.png');
-        this.load.image('button', 'assets/spacebar.png');
-        this.load.audio('buzina', 'assets/buzina.wav');
-        this.load.audio('acelerar', 'assets/acelerar.mp3'); 
+
         /********* loading bar *********/
         var progressBar = this.add.graphics();
         var progressBox = this.add.graphics();
@@ -75,14 +65,24 @@ export default class LoadScene extends Phaser.Scene {
             assetText.destroy();
         });
         
-        this.load.image('logo', 'assets/tugatraffic.png');
-        for (var i = 0; i < 500; i++) {
+        for (var i = 0; i < 400; i++) {
             this.load.image('Carregando modelo: ' + i, 'assets/tugatraffic.png');
         } 
         /********* loading bar *********/
+        this.load.spritesheet('carroplayer', 'assets/carro1.png', { frameWidth: 169, frameHeight: 296 });
+        this.load.spritesheet('carroinimigo', 'assets/carro2.png', { frameWidth: 176, frameHeight: 291 });
+        this.load.spritesheet('ambuinimiga', 'assets/ambu.png', { frameWidth: 63, frameHeight: 97 });
+        this.load.spritesheet('carroinimigo2', 'assets/azul.png', { frameWidth: 61, frameHeight: 88 });
+        this.load.spritesheet('motainimiga', 'assets/mota1.png', { frameWidth: 30, frameHeight: 58 });
+        this.load.spritesheet('gas', 'assets/gas.png', { frameWidth: 612, frameHeight: 580 });
+        this.load.spritesheet('camiao', 'assets/camiao.png', { frameWidth: 120, frameHeight: 239 });
+        this.load.image('estrada', 'assets/sky.png');
+        this.load.image('button', 'assets/spacebar.png');
+        this.load.audio('buzina', 'assets/buzina.wav');
+        this.load.audio('acelerar', 'assets/acelerar.mp3'); 
     }
 
     create() {
-        this.scene.start('menu');
+        this.scene.start('main');
     }
 }

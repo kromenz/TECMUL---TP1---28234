@@ -14,7 +14,8 @@ var config = {
             debug: false
         }
     },
-    scene: [LoadScene, MenuScene, MainScene]
+    scene: [MenuScene, LoadScene, MainScene]
 };
 
 window.game = new Phaser.Game(config);
+game.stage.backgroundColor = "#4488AA";
