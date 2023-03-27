@@ -16,10 +16,7 @@ export default class MenuScene extends Phaser.Scene {
         const logo = this.add.image(540, 320, 'logo');
         this.texto();
         this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        //logo.setDepth(1);
         
-
-        //this.scene.start('load');
     }
 
     update(){

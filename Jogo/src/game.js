@@ -18,4 +18,3 @@ var config = {
 };
 
 window.game = new Phaser.Game(config);
-game.stage.backgroundColor = "#4488AA";

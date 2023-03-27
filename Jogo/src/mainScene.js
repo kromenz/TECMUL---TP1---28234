@@ -13,7 +13,9 @@ export default class MainScene extends Phaser.Scene{
     scoreText;
     soundPlaying = false;
     gameOvar = false;
-    
+    keyReload;
+    mKey; 
+
     constructor(){
         super({key : 'main'});
     }
@@ -33,10 +35,10 @@ export default class MainScene extends Phaser.Scene{
         
         // Adicionar o texto da pontuação
         this.scoreText = this.add.text(985, 10, 'score: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'});
-        this.gasText = this.add.text(985, 680, 'gasolina: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'});
+        this.gasText = this.add.text(985, 680, 'fuel: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'});
         // Adicionar as teclas de controle
         this.cursors = this.input.keyboard.createCursorKeys();
-        
+        this.mKey = this.input.keyboard.addKey('M');
 
         // Adicionar o evento de tempo para criar novos carros aleatoriamente
         this.timerEvent = this.time.addEvent({
@@ -87,6 +89,11 @@ export default class MainScene extends Phaser.Scene{
             return;
         }
 
+        if (this.mKey.isDown) {
+            this.gasol = 100;
+            this.gasText.setText('Fuel: ' + this.gasol);
+        }
+
         this.player.body.allowGravity = false;
         // Movimentar o carro do jogador com as teclas de controle
         if (this.cursors.up.isDown) {
@@ -124,11 +131,20 @@ export default class MainScene extends Phaser.Scene{
         
         // Atualizar a pontuação
         this.scoreText.setText('Km: ' + this.score.toFixed(1));
-        this.gasText.setText('Gas: ' + this.gasol)
+        this.gasText.setText('Fuel: ' + this.gasol)
         // Acelerar os carros inimigos à medida que o jogo avança
         this.cars.getChildren().forEach((child) => {
             child.setVelocityY(200 + (this.score / 10));
-        })
+        }) 
+    }
+
+    EventoDeTempo(del, evento){ //EM PROGRESSO
+        this.time.addEvent({
+            delay: del,
+            callback: evento,
+            callbackScope: this,
+            loop: true
+        });
     }
 
     createCar() {
@@ -337,15 +353,9 @@ export default class MainScene extends Phaser.Scene{
         botao.setInteractive();
 
         
-        //Está a funcionar, mas dá reload ao jogo todo, e o objetivo é a apenas esta cena
+        //Está a funcionar, mas só se clicar no botão
         botao.on('pointerup', function (event) { window.location.reload();}, this);
-        //ESTE NÃO FUNCIONA
-        //this.input.keyboard.on('keydown-SPACE', function (event) {window.location.reload()}, this);
-
-        /* RESETAR AS VARIÁVEIS PORQUE SENÃO LEVAR RESET NÃO FUNCIONA
-        if(botao.on('pointerup', function (event) {this.scene.restart()}, this)){
-            this.resetVars();
-        }
-        */
+        
+    
     }
 }
