@@ -3,18 +3,17 @@ background de uma pista com 6 vias, 3 para cada sentido - ✓
 introdução do item do galão de gasolina 
 criar a barra de gasolina 
 melhor geração de carros
-corrigir o game over
+corrigir o game over ✓
 
 
 EXTRAS:
-introduzir diferentes tipos de veiculos (carro padrão, camião, limusine, moto ou bicicleta)
+introduzir diferentes tipos de veiculos (carro padrão, camião, limusine, moto ou bicicleta) ✓
 meter os carros e outras coisas com animação (sprite)
 meter o carro a andar mais depressa quando as teclas são preenchidas, e sempre o carro anda gastar mais gasolina 
 carros com diferentes velocidades
-tela de start
 tela de escolha de veículo
 introduzir sons ✓
 introduzir cheats
-loading screen e o jogo só começar quando se carregar numa tecla
+loading screen e o jogo só começar quando se carregar numa tecla ✓
 
 
