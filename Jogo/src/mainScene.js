@@ -3,7 +3,7 @@
 export default class MainScene extends Phaser.Scene{
     player;
     cars;
-    gasolina;
+    barrilGas;
     gasText;
     timerEvent;
     timerEvent2;
@@ -31,7 +31,7 @@ export default class MainScene extends Phaser.Scene{
         
         // Adicionar os carros inimigos
         this.cars = this.physics.add.group();
-        this.gasolina = this.physics.add.group();
+        this.barrilGas = this.physics.add.group();
         
         // Adicionar o texto da pontuação
         this.scoreText = this.add.text(985, 10, 'score: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'});
@@ -39,6 +39,7 @@ export default class MainScene extends Phaser.Scene{
         // Adicionar as teclas de controle
         this.cursors = this.input.keyboard.createCursorKeys();
         this.mKey = this.input.keyboard.addKey('M');
+        this.keyReload = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         // Adicionar o evento de tempo para criar novos carros aleatoriamente
         this.timerEvent = this.time.addEvent({
@@ -82,12 +83,27 @@ export default class MainScene extends Phaser.Scene{
             callbackScope: this,
             loop: true
         });
+
+        this.gasol = 100;
     }
 
     update (){
-        if(this.gameOvar){
+        if(this.gameOvar){  
             return;
         }
+
+        //GASOLINA
+        if (this.cursors.up.isDown){
+            this.gasol -=0.2;
+        }
+        else{
+            this.gasol -= 0.08;
+        }
+
+        if(this.gasol <= 0){
+            this.gameOver2();
+        }
+
 
         if (this.mKey.isDown) {
             this.gasol = 100;
@@ -131,7 +147,7 @@ export default class MainScene extends Phaser.Scene{
         
         // Atualizar a pontuação
         this.scoreText.setText('Km: ' + this.score.toFixed(1));
-        this.gasText.setText('Fuel: ' + this.gasol)
+        this.gasText.setText('Fuel: ' + this.gasol.toFixed())
         // Acelerar os carros inimigos à medida que o jogo avança
         this.cars.getChildren().forEach((child) => {
             child.setVelocityY(200 + (this.score / 10));
@@ -287,7 +303,7 @@ export default class MainScene extends Phaser.Scene{
                 break;
         }
         
-        const g = this.gasolina.create(y, 0, 'gas');
+        const g = this.barrilGas.create(y, 0, 'gas');
         g.setVelocityY(50);
         g.setScale(0.1);
         g.setCollideWorldBounds(true);
@@ -314,12 +330,12 @@ export default class MainScene extends Phaser.Scene{
         this.gameOvar = true;
 
         // Mostrar a mensagem de fim de jogo
-        const gameOverText = this.add.text(220, 160, 'Game Over\nFinal this.score: '+ this.score.toFixed(2) + '\nPress space to restart the game' , { 
-            fontSize: '55px Georgia', 
-            fill: '#000',
+        const gameOverText = this.add.text(170, 160, 'BATESTES PA\nSó fizeste: '+ this.score.toFixed(2) + ' Km' + '\nCarrega no botão e tem uma surpresa' , { 
+            fontSize: '49px Georgia', 
+            fill: '#ffa500',
             align: 'center',
             borderColor: '#fff',
-            borderWidth: 5,
+            borderWidth: 10,
             padding: {
                 left: 10,
                 right: 10,
@@ -328,7 +344,55 @@ export default class MainScene extends Phaser.Scene{
             },
             shadowOffsetX: 5,
             shadowOffsetY: 5,
-            shadowColor: '#000',
+            shadowColor: '#FFF',
+            shadowBlur: 5
+        });    
+
+        this.timerEvent.remove(false);
+        this.timerEvent2.remove(false);
+        this.timerEvent3.remove(false);
+        this.scoreEvent.remove(false);
+        this.GasEvent.remove(false);
+
+        // Parar a movimentação dos carros
+        this.player.setVelocityX(0);
+        this.player.setVelocityY(0);
+        this.cars.setVelocityY(0);
+        this.timerEvent.remove(false);
+        this.timerEvent2.remove(false);
+        this.timerEvent3.remove(false);
+        this.scoreEvent.remove(false);
+        this.GasEvent.remove(false);
+
+        const botao = this.add.image(550, 690, 'button');
+        botao.setScale(0.5)
+        botao.setInteractive();
+
+        //Está a funcionar, mas só se clicar no botão, e reinicia o jogo na totalidade....
+        botao.on('pointerup', function (event) { window.location.reload();}, this);
+        
+    
+    }
+
+    gameOver2() {
+        this.gameOvar = true;
+
+        // Mostrar a mensagem de fim de jogo
+        const gameOverText = this.add.text(170, 160, 'Ficaste sem gota, burro\nSó fizeste: '+ this.score.toFixed(2) + ' Km' + '\nCarrega no botão e tem uma surpresa' , { 
+            fontSize: '49px Georgia', 
+            fill: '#ffa500',
+            align: 'center',
+            borderColor: '#fff',
+            borderWidth: 10,
+            padding: {
+                left: 10,
+                right: 10,
+                top: 5,
+                bottom: 5
+            },
+            shadowOffsetX: 5,
+            shadowOffsetY: 5,
+            shadowColor: '#FFF',
             shadowBlur: 5
         });
 
@@ -352,8 +416,7 @@ export default class MainScene extends Phaser.Scene{
         botao.setScale(0.5)
         botao.setInteractive();
 
-        
-        //Está a funcionar, mas só se clicar no botão
+        //Está a funcionar, mas só se clicar no botão, e reinicia o jogo na totalidade....
         botao.on('pointerup', function (event) { window.location.reload();}, this);
         
     
