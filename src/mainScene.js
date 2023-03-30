@@ -33,8 +33,9 @@ export default class MainScene extends Phaser.Scene{
         this.player.setCollideWorldBounds(true);
         this.player.setScale(0.275);
         
-        // Adicionar os carros inimigos
+        // criar o grupo dos carros inimigos
         this.cars = this.physics.add.group();
+        
         this.barrilGas = this.physics.add.group();
         
         // Adicionar o texto da pontuação
@@ -43,7 +44,6 @@ export default class MainScene extends Phaser.Scene{
         // Adicionar as teclas de controle
         this.cursors = this.input.keyboard.createCursorKeys();
         this.mKey = this.input.keyboard.addKey('M');
-        this.keyReload = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         // Adicionar o evento de tempo para criar novos carros aleatoriamente
         this.timerEvent = this.time.addEvent({
@@ -98,7 +98,7 @@ export default class MainScene extends Phaser.Scene{
 
         //GASOLINA
         if (this.cursors.up.isDown){
-            this.gasol -=0.15;
+            this.gasol -= 0.15;
         }
         else{
             this.gasol -= 0.08;
