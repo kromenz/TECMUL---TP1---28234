@@ -13,7 +13,10 @@ export default class MainScene extends Phaser.Scene{
     gameOvar = false;
     keyReload;
     mKey;
+    nKey;
     verificalane = [3,4] 
+    collideCheat = 1;
+    godLikeText;
 
     constructor(){
         super({key : 'main'});
@@ -24,6 +27,7 @@ export default class MainScene extends Phaser.Scene{
         this.score = 0;
         this.gasol = 0;
         this.gameOvar = false;
+        this.collideCheat = false;
         
         // Adicionar o fundo do jogo
         this.add.image(540, 360, 'estrada');
@@ -35,15 +39,15 @@ export default class MainScene extends Phaser.Scene{
         
         // criar o grupo dos carros inimigos
         this.cars = this.physics.add.group();
-        
-        this.barrilGas = this.physics.add.group();
-        
+               
         // Adicionar o texto da pontuação
         this.scoreText = this.add.text(985, 10, 'score: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'});
         this.gasText = this.add.text(985, 680, 'fuel: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'});
         // Adicionar as teclas de controle
         this.cursors = this.input.keyboard.createCursorKeys();
         this.mKey = this.input.keyboard.addKey('M');
+        this.nKey = this.input.keyboard.addKey('N');
+        this.bKey = this.input.keyboard.addKey('B');
 
         // Adicionar o evento de tempo para criar novos carros aleatoriamente
         this.timerEvent = this.time.addEvent({
@@ -98,12 +102,12 @@ export default class MainScene extends Phaser.Scene{
 
         //GASOLINA
         if (this.cursors.up.isDown){
-            this.gasol -= 0.15;
+            this.gasol -= 0.016;
         }
         else{
-            this.gasol -= 0.08;
+            this.gasol -= 0.008;
         }
-
+        //GAME OVER DA GASOLINA
         if(this.gasol <= 0){
             var marcelo = `Ficaste sem gota, burro\nSó fizeste: ${this.score.toFixed(2)} Km \nCarrega no botão e tem uma surpresa`
             this.gameOver2(marcelo);
@@ -113,6 +117,16 @@ export default class MainScene extends Phaser.Scene{
         if (this.mKey.isDown) {
             this.gasol = 100;
             this.gasText.setText('Fuel: ' + this.gasol);
+        }
+
+        if (this.nKey.isDown) {
+            this.collideCheat = 0;
+            this.godLike();
+        }
+        
+        if (this.bKey.isDown) {
+            this.collideCheat = 1;
+            this.godLikeText.visible = false;
         }
 
         this.player.body.allowGravity = false;
@@ -148,9 +162,10 @@ export default class MainScene extends Phaser.Scene{
             this.player.x = 900;
         }
         // Verificar colisões entre o carro do jogador e os carros inimigos
-        this.physics.add.collider(this.player, this.cars, this.gameOver, null, this);
+        if(this.collideCheat == 1){
+            this.physics.add.collider(this.player, this.cars, this.gameOver, null, this);
+        }
         this.physics.add.collider(this.player, this.barrilGas, this.adicionaGas, null, this);
-        
         // Atualizar a pontuação
         this.scoreText.setText('Km: ' + this.score.toFixed(1));
         this.gasText.setText('Fuel: ' + this.gasol.toFixed())
@@ -313,15 +328,15 @@ export default class MainScene extends Phaser.Scene{
                 break;
         }
         
-        const g = this.barrilGas.create(y, 0, 'gas');
-        g.setVelocityY(50);
-        g.setScale(0.1);
-        g.setCollideWorldBounds(true);
-        g.setBounce(1);
-        g.setCollideWorldBounds(false);
+        this.barrilGas = this.physics.add.sprite(y, 0, 'gas');
+        this.barrilGas.setVelocityY(50);
+        this.barrilGas.setScale(0.1);
+        this.barrilGas.setCollideWorldBounds(true);
+        this.barrilGas.setBounce(1);
+        this.barrilGas.setCollideWorldBounds(false);
 
 
-        let dl= Phaser.Math.Between(6500,16500);
+        let dl= Phaser.Math.Between(5000,13500);
         this.GasEvent.delay = dl;
 
     }
@@ -337,12 +352,34 @@ export default class MainScene extends Phaser.Scene{
     }
 
     adicionaGas(){
-        if(this.gasol > 100){
+        this.barrilGas.destroy();
+        if(this.gasol >= 60){
             this.gasol = 100;
         }
         else{
             this.gasol += 40;
         }
+    }
+
+    godLike(){
+        this.collideCheat = 0; 
+        const godLikeText = this.add.text(320, 60, 'ESTÁS IMPARÁVEL\nGOD MODE ON' , { 
+            fontSize: '49px Georgia', 
+            fill: '#ffa500',
+            align: 'center',
+            borderColor: '#fff',
+            borderWidth: 10,
+            padding: {
+                left: 10,
+                right: 10,
+                top: 5,
+                bottom: 5
+            },
+            shadowOffsetX: 5,
+            shadowOffsetY: 5,
+            shadowColor: '#FFF',
+            shadowBlur: 5
+        });
     }
 
     gameOver() {
