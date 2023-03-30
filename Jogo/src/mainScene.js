@@ -20,8 +20,11 @@ export default class MainScene extends Phaser.Scene{
     }
 
     create(){
-
+        //RESETAR VARIÁVEIS DEPOIS DO GAMEOVER
+        this.score = 0;
+        this.gasol = 0;
         this.gameOvar = false;
+        
         // Adicionar o fundo do jogo
         this.add.image(540, 360, 'estrada');
 
