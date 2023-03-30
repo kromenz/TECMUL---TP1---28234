@@ -1,7 +1,7 @@
 
-import MainScene from '/src/mainScene.js';
-import MenuScene from '/src/menuScene.js';
-import LoadScene from '/src/loadScene.js';
+import MainScene from '/jogo/src/mainScene.js';
+import MenuScene from '/jogo/src/menuScene.js';
+import LoadScene from '/jogo/src/loadScene.js';
 
 var config = {
     type: Phaser.AUTO,
