@@ -1,5 +1,3 @@
- 
-    
 export default class MainScene extends Phaser.Scene{
     player;
     cars;
@@ -14,13 +12,16 @@ export default class MainScene extends Phaser.Scene{
     soundPlaying = false;
     gameOvar = false;
     keyReload;
-    mKey; 
+    mKey;
+    verificalane = [3,4] 
 
     constructor(){
         super({key : 'main'});
     }
 
     create(){
+
+        this.gameOvar = false;
         // Adicionar o fundo do jogo
         this.add.image(540, 360, 'estrada');
 
@@ -101,7 +102,8 @@ export default class MainScene extends Phaser.Scene{
         }
 
         if(this.gasol <= 0){
-            this.gameOver2();
+            var marcelo = `Ficaste sem gota, burro\nSó fizeste: ${this.score.toFixed(2)} Km \nCarrega no botão e tem uma surpresa`
+            this.gameOver2(marcelo);
         }
 
 
@@ -144,6 +146,7 @@ export default class MainScene extends Phaser.Scene{
         }
         // Verificar colisões entre o carro do jogador e os carros inimigos
         this.physics.add.collider(this.player, this.cars, this.gameOver, null, this);
+        this.physics.add.collider(this.player, this.barrilGas, this.adicionaGas, null, this);
         
         // Atualizar a pontuação
         this.scoreText.setText('Km: ' + this.score.toFixed(1));
@@ -151,7 +154,7 @@ export default class MainScene extends Phaser.Scene{
         // Acelerar os carros inimigos à medida que o jogo avança
         this.cars.getChildren().forEach((child) => {
             child.setVelocityY(200 + (this.score / 10));
-        }) 
+        })
     }
 
     EventoDeTempo(del, evento){ //EM PROGRESSO
@@ -168,8 +171,12 @@ export default class MainScene extends Phaser.Scene{
         // Escolher uma via aleatória para adicionar o carro inimigo
         let transito = Phaser.Math.Between(1, 6);
         if (transito != 1){
-
+            
             let lane = Phaser.Math.Between(1,6)  
+            while (lane == this.verificalane[this.verificalane.length-1]){
+                lane = Phaser.Math.Between(1,6);
+            }
+            this.verificalane.push(lane);
             let c = Phaser.Math.Between(1, 14);
             let y;
             //252 360 486 612 738 846
@@ -326,59 +333,25 @@ export default class MainScene extends Phaser.Scene{
         return true;
     }
 
-    gameOver() {
-        this.gameOvar = true;
-
-        // Mostrar a mensagem de fim de jogo
-        const gameOverText = this.add.text(170, 160, 'BATESTES PA\nSó fizeste: '+ this.score.toFixed(2) + ' Km' + '\nCarrega no botão e tem uma surpresa' , { 
-            fontSize: '49px Georgia', 
-            fill: '#ffa500',
-            align: 'center',
-            borderColor: '#fff',
-            borderWidth: 10,
-            padding: {
-                left: 10,
-                right: 10,
-                top: 5,
-                bottom: 5
-            },
-            shadowOffsetX: 5,
-            shadowOffsetY: 5,
-            shadowColor: '#FFF',
-            shadowBlur: 5
-        });    
-
-        this.timerEvent.remove(false);
-        this.timerEvent2.remove(false);
-        this.timerEvent3.remove(false);
-        this.scoreEvent.remove(false);
-        this.GasEvent.remove(false);
-
-        // Parar a movimentação dos carros
-        this.player.setVelocityX(0);
-        this.player.setVelocityY(0);
-        this.cars.setVelocityY(0);
-        this.timerEvent.remove(false);
-        this.timerEvent2.remove(false);
-        this.timerEvent3.remove(false);
-        this.scoreEvent.remove(false);
-        this.GasEvent.remove(false);
-
-        const botao = this.add.image(550, 690, 'button');
-        botao.setScale(0.5)
-        botao.setInteractive();
-
-        //Está a funcionar, mas só se clicar no botão, e reinicia o jogo na totalidade....
-        botao.on('pointerup', function (event) { window.location.reload();}, this);
-        
-    
+    adicionaGas(){
+        if(this.gasol > 100){
+            this.gasol = 100;
+        }
+        else{
+            this.gasol += 40;
+        }
     }
 
-    gameOver2() {
+    gameOver() {
+        var marcelo = `BATESTES PA\nSó fizeste: ${this.score.toFixed(2)} Km \nCarrega no botão e tem uma surpresa`;
+        this.gameOver2(marcelo);    
+    }
+
+    gameOver2(text = '') {
         this.gameOvar = true;
 
         // Mostrar a mensagem de fim de jogo
-        const gameOverText = this.add.text(170, 160, 'Ficaste sem gota, burro\nSó fizeste: '+ this.score.toFixed(2) + ' Km' + '\nCarrega no botão e tem uma surpresa' , { 
+        const gameOverText = this.add.text(170, 160, text , { 
             fontSize: '49px Georgia', 
             fill: '#ffa500',
             align: 'center',
@@ -406,6 +379,7 @@ export default class MainScene extends Phaser.Scene{
         this.player.setVelocityX(0);
         this.player.setVelocityY(0);
         this.cars.setVelocityY(0);
+        this.cars.setVelocityX(0);
         this.timerEvent.remove(false);
         this.timerEvent2.remove(false);
         this.timerEvent3.remove(false);
@@ -417,8 +391,6 @@ export default class MainScene extends Phaser.Scene{
         botao.setInteractive();
 
         //Está a funcionar, mas só se clicar no botão, e reinicia o jogo na totalidade....
-        botao.on('pointerup', function (event) { window.location.reload();}, this);
-        
-    
+        botao.on('pointerup', function (event) { this.scene.start('load');}, this);
     }
 }
