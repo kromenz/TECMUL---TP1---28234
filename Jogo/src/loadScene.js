@@ -65,7 +65,7 @@ export default class LoadScene extends Phaser.Scene {
             assetText.destroy();
         });
         
-        for (var i = 0; i < 400; i++) {
+        for (var i = 0; i < 200; i++) {
             this.load.image('Carregando modelo: ' + i, 'assets/tugatraffic.png');
         } 
         /********* loading bar *********/

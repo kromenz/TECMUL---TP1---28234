@@ -337,6 +337,7 @@ export default class MainScene extends Phaser.Scene{
     }
 
     adicionaGas(){
+        //this.barrilGas.disableBody(true, true);
         if(this.gasol > 100){
             this.gasol = 100;
         }
