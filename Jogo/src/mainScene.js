@@ -94,7 +94,7 @@ export default class MainScene extends Phaser.Scene{
 
         //GASOLINA
         if (this.cursors.up.isDown){
-            this.gasol -=0.2;
+            this.gasol -=0.15;
         }
         else{
             this.gasol -= 0.08;
