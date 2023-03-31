@@ -6,8 +6,8 @@ export default class MainScene extends Phaser.Scene{
     timerEvent;
     timerEvent2;
     timerEvent3;
-    score = 0;
-    gasol = 0;
+    score
+    gasol
     scoreText;
     soundPlaying = false;
     gameOvar = false;
@@ -15,8 +15,12 @@ export default class MainScene extends Phaser.Scene{
     mKey;
     nKey;
     verificalane = [3,4] 
-    collideCheat = 1;
+    collideCheat
     godLikeText;
+    godLikeRoad;
+    road;
+    collisionPlayerCars
+    collisionPlayerGas
 
     constructor(){
         super({key : 'main'});
@@ -27,7 +31,7 @@ export default class MainScene extends Phaser.Scene{
         this.score = 0;
         this.gasol = 0;
         this.gameOvar = false;
-        this.collideCheat = 0;
+        this.collideCheat = 2;
 
         this.godLikeText = this.add.text(320, 60, 'ESTÁS IMPARÁVEL\nGOD MODE ON' , { 
             fontSize: '49px Georgia', 
@@ -49,7 +53,10 @@ export default class MainScene extends Phaser.Scene{
         this.godLikeText.setVisible(false).setDepth(1)
         
         // Adicionar o fundo do jogo
-        this.add.image(540, 360, 'estrada');
+        this.road = this.add.image(540, 360, 'estrada');
+        //FUNDO ALTERNATIVO
+        /* this.godLikeRoad = this.add.image(540, 360, 'estradaGOD');
+        this.godLikeRoad.setVisible(false); */
 
         // Adicionar o carro do jogador
         this.player = this.physics.add.sprite(560, 690, 'carroplayer');
@@ -68,6 +75,9 @@ export default class MainScene extends Phaser.Scene{
         this.nKey = this.input.keyboard.addKey('N');
         this.bKey = this.input.keyboard.addKey('B');
 
+
+        this.collisionPlayerCars = this.physics.add.collider(this.player, this.cars, this.gameOver, null, this);
+        this.collisionPlayerGas = this.physics.add.collider(this.player, this.barrilGas, this.adicionaGas, null, this);
         // Adicionar o evento de tempo para criar novos carros aleatoriamente
         this.timerEvent = this.time.addEvent({
             delay: 1000,
@@ -115,16 +125,20 @@ export default class MainScene extends Phaser.Scene{
     }
 
     update (){
+
         if(this.gameOvar){  
             return;
         }
 
         //GASOLINA
         if (this.cursors.up.isDown){
-            this.gasol -= 0.016;
+            this.gasol -= 0.05;
         }
         else{
-            this.gasol -= 0.008;
+            this.gasol -= 0.031;
+        }
+        if(this.collisionPlayerGas){
+            
         }
         //GAME OVER DA GASOLINA
         if(this.gasol <= 0){
@@ -132,21 +146,28 @@ export default class MainScene extends Phaser.Scene{
             this.gameOver2(marcelo);
         }
 
-
         if (this.mKey.isDown) {
             this.gasol = 100;
             this.gasText.setText('Fuel: ' + this.gasol);
         }
 
         if (this.nKey.isDown) {
-            this.collideCheat = 0;
-            this.godLikeText.setVisible(true)
-            
+            if(this.collideCheat != -1) {
+                this.collideCheat = -1
+                this.collisionPlayerCars?.destroy();
+                console.log(this.collideCheat)
+                /* this.godLikeRoad.setVisible(true) */
+                this.godLikeText.setVisible(true)
+            }  
         }
         
         if (this.bKey.isDown) {
-            this.collideCheat = 1;
-            this.godLikeText.setVisible(false)
+            if(this.collideCheat != 2) {
+                this.collideCheat = 2;
+                this.collisionPlayerCars = this.physics.add.collider(this.player, this.cars, this.gameOver, null, this);
+                /* this.godLikeRoad.setVisible(false) */
+                this.godLikeText.setVisible(false)    
+            }
         }
 
         this.player.body.allowGravity = false;
@@ -181,11 +202,7 @@ export default class MainScene extends Phaser.Scene{
         } else if (this.player.x > 900) {
             this.player.x = 900;
         }
-        // Verificar colisões entre o carro do jogador e os carros inimigos
-        if(this.collideCheat == 1){
-            this.physics.add.collider(this.player, this.cars, this.gameOver, null, this);
-        }
-        this.physics.add.collider(this.player, this.barrilGas, this.adicionaGas, null, this);
+        
         // Atualizar a pontuação
         this.scoreText.setText('Km: ' + this.score.toFixed(1));
         this.gasText.setText('Fuel: ' + this.gasol.toFixed())
@@ -258,6 +275,17 @@ export default class MainScene extends Phaser.Scene{
             // Adicionar o carro inimigo na posição aleatória
             if (c==1){
                 this.car = this.cars.create(y+y2, 0, 'ambuinimiga');
+
+                this.anims.create({
+                    key: 'sirene',
+                    frames: this.anims.generateFrameNumbers('ambuinimiga', { start: 0, end: 3 }),
+                    frameRate: 10,
+                    repeat: -1
+                });
+
+                this.car.anims.play('sirene', true);
+
+
                 this.car.setScale(0.875);
             } else if (c>1 && c<6) {
                 this.car = this.cars.create(y+y2, 0, 'carroinimigo');
@@ -317,8 +345,8 @@ export default class MainScene extends Phaser.Scene{
     
     EventoVelo(){
         let scoreInt = Math.floor(this.score);
-        if (this.scoreInt%5 === 0 && this.scoreInt!== 0) {
-            this.physics.world.gravity.y += 500;
+        if (this.scoreInt%2.5 === 0 && this.scoreInt!== 0) {
+            this.physics.world.gravity.y += 750;
         };
     }
 
@@ -371,8 +399,8 @@ export default class MainScene extends Phaser.Scene{
         return true;
     }
 
-    adicionaGas(){
-        this.barrilGas.destroy();
+    adicionaGas(player, gas) {
+        gas.destroy()
         if(this.gasol >= 60){
             this.gasol = 100;
         }

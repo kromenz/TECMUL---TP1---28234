@@ -71,12 +71,13 @@ export default class LoadScene extends Phaser.Scene {
         /********* loading bar *********/
         this.load.spritesheet('carroplayer', 'assets/carro1.png', { frameWidth: 169, frameHeight: 296 });
         this.load.spritesheet('carroinimigo', 'assets/carro2.png', { frameWidth: 176, frameHeight: 291 });
-        this.load.spritesheet('ambuinimiga', 'assets/ambu.png', { frameWidth: 63, frameHeight: 97 });
+        this.load.spritesheet('ambuinimiga', 'assets/ambusprite.png', { frameWidth: 63, frameHeight: 97 });
         this.load.spritesheet('carroinimigo2', 'assets/azul.png', { frameWidth: 61, frameHeight: 88 });
         this.load.spritesheet('motainimiga', 'assets/mota1.png', { frameWidth: 30, frameHeight: 58 });
         this.load.spritesheet('gas', 'assets/gas.png', { frameWidth: 612, frameHeight: 580 });
         this.load.spritesheet('camiao', 'assets/camiao.png', { frameWidth: 120, frameHeight: 239 });
         this.load.image('estrada', 'assets/sky.png');
+        this.load.image('estradaGOD', 'assets/roadGOD.png');
         this.load.image('button', 'assets/spacebar.png');
         this.load.audio('buzina', 'assets/buzina.wav');
         this.load.audio('acelerar', 'assets/acelerar.mp3'); 
