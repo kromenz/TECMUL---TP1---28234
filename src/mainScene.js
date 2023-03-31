@@ -1,24 +1,27 @@
 export default class MainScene extends Phaser.Scene{
-    player;
-    cars;
-    gasText;
-    timerEvent;
-    timerEvent2;
-    timerEvent3;
+    player
+    cars
+    gasText
+    timerEvent
+    timerEvent2
+    timerEvent3
     score
     gasol
     gasolGroup
-    scoreText;
-    soundPlaying = false;
-    gameOvar = false;
-    keyReload;
-    mKey;
-    nKey;
+    scoreText
+    soundPlaying = false
+    gameOvar = false
+    mKey
+    nKey
+    instructionsKey
+    instructionsText
+    cheatCodeKey
+    cheatCodeText
     verificalane = [3,4] 
     collideCheat
-    godLikeText;
-    godLikeRoad;
-    road;
+    godLikeText
+    godLikeRoad
+    road
     collisionPlayerCars
     collisionPlayerGas
 
@@ -51,35 +54,76 @@ export default class MainScene extends Phaser.Scene{
             shadowBlur: 5
         });
         this.godLikeText.setVisible(false).setDepth(1)
+
+        this.instructionsText = this.add.text(320, 60, 'I - Cheat Code' , { 
+            fontSize: '27px Georgia', 
+            fill: '#ffa500',
+            align: 'center',
+            borderColor: '#fff',
+            borderWidth: 10,
+            padding: {
+                left: 10,
+                right: 10,
+                top: 5,
+                bottom: 5
+            },
+            shadowOffsetX: 5,
+            shadowOffsetY: 5,
+            shadowColor: '#FFF',
+            shadowBlur: 5
+        });
+        this.instructionsText.setVisible(true).setDepth(1)
+
+        this.cheatCodeText = this.add.text(320, 60, 'M - Gasolina\nN - GOD MODE\nB - Normal Mode\nO - Sair' , { 
+            fontSize: '27px Georgia', 
+            fill: '#ffa500',
+            align: 'center',
+            borderColor: '#fff',
+            borderWidth: 10,
+            padding: {
+                left: 10,
+                right: 10,
+                top: 5,
+                bottom: 5
+            },
+            shadowOffsetX: 5,
+            shadowOffsetY: 5,
+            shadowColor: '#FFF',
+            shadowBlur: 5
+        });
+        this.cheatCodeText.setVisible(false).setDepth(1)
         
         // Adicionar o fundo do jogo
-        this.road = this.add.image(540, 360, 'estrada');
+        this.road = this.add.image(540, 360, 'estrada')
         //FUNDO ALTERNATIVO
-        this.godLikeRoad = this.add.image(540, 360, 'estradaGOD');
-        this.godLikeRoad.setVisible(false);
+        this.godLikeRoad = this.add.image(540, 360, 'estradaGOD')
+        this.godLikeRoad.setVisible(false)
 
         // Adicionar o carro do jogador
-        this.player = this.physics.add.sprite(560, 690, 'carroplayer');
+        this.player = this.physics.add.sprite(560, 690, 'carroplayer')
         this.player.setCollideWorldBounds(true);
-        this.player.setScale(0.275);
+        this.player.setScale(0.275)
         
         // criar o grupo dos carros inimigos
-        this.cars = this.physics.add.group();
+        this.cars = this.physics.add.group()
         this.gasolGroup = this.physics.add.group()
         this.gasolGroup.setVelocityY(50)
                
         // Adicionar o texto da pontuação
-        this.scoreText = this.add.text(985, 10, 'score: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'});
-        this.gasText = this.add.text(985, 680, 'fuel: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'});
+        this.scoreText = this.add.text(985, 10, 'score: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'})
+        this.gasText = this.add.text(985, 680, 'fuel: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'})
         // Adicionar as teclas de controle
-        this.cursors = this.input.keyboard.createCursorKeys();
-        this.mKey = this.input.keyboard.addKey('M');
-        this.nKey = this.input.keyboard.addKey('N');
-        this.bKey = this.input.keyboard.addKey('B');
+        this.cursors = this.input.keyboard.createCursorKeys()
+        this.mKey = this.input.keyboard.addKey('M')
+        this.nKey = this.input.keyboard.addKey('N')
+        this.bKey = this.input.keyboard.addKey('B')
+        this.instructionsKey = this.input.keyboard.addKey('I')
+        this.cheatCodeKey = this.input.keyboard.addKey('O')
 
+        //Colisões entre carros e inimigos ---- carros e gasolina
+        this.collisionPlayerCars = this.physics.add.collider(this.player, this.cars, this.gameOver, null, this)
+        this.collisionPlayerGas = this.physics.add.collider(this.player, this.gasolGroup, this.adicionaGas, null, this)
 
-        this.collisionPlayerCars = this.physics.add.collider(this.player, this.cars, this.gameOver, null, this);
-        this.collisionPlayerGas = this.physics.add.collider(this.player, this.gasolGroup, this.adicionaGas, null, this);
         // Adicionar o evento de tempo para criar novos carros aleatoriamente
         this.timerEvent = this.time.addEvent({
             delay: 1000,
@@ -167,6 +211,14 @@ export default class MainScene extends Phaser.Scene{
                 this.godLikeRoad.setVisible(false)
                 this.godLikeText.setVisible(false)    
             }
+        }
+
+        if (this.instructionsKey.isDown) {
+            this.instructionsText.setVisible(false)
+        }
+
+        if (this.cheatCodeKey.isDown) {
+            this.cheatCodeText.setVisible(true)
         }
 
         this.player.body.allowGravity = false;
