@@ -55,9 +55,9 @@ export default class MainScene extends Phaser.Scene{
         });
         this.godLikeText.setVisible(false).setDepth(1)
 
-        this.instructionsText = this.add.text(320, 60, 'I - Cheat Code' , { 
-            fontSize: '27px Georgia', 
-            fill: '#ffa500',
+        this.instructionsText = this.add.text(40, 30, 'I - Cheat Code' , { 
+            fontSize: '20px Georgia', 
+            fill: '#fff',
             align: 'center',
             borderColor: '#fff',
             borderWidth: 10,
@@ -74,9 +74,9 @@ export default class MainScene extends Phaser.Scene{
         });
         this.instructionsText.setVisible(true).setDepth(1)
 
-        this.cheatCodeText = this.add.text(320, 60, 'M - Gasolina\nN - GOD MODE\nB - Normal Mode\nO - Sair' , { 
-            fontSize: '27px Georgia', 
-            fill: '#ffa500',
+        this.cheatCodeText = this.add.text(40, 30, 'M - Gasolina\nN - GOD MODE\nB - Normal Mode\nO - Sair' , { 
+            fontSize: '20px Georgia', 
+            fill: '#fff',
             align: 'center',
             borderColor: '#fff',
             borderWidth: 10,
@@ -110,8 +110,8 @@ export default class MainScene extends Phaser.Scene{
         this.gasolGroup.setVelocityY(50)
                
         // Adicionar o texto da pontuação
-        this.scoreText = this.add.text(985, 10, 'score: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'})
-        this.gasText = this.add.text(985, 680, 'fuel: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'})
+        this.scoreText = this.add.text(985, 10, 'score: 0', { fontSize: '20px Calibri bold', fill: '#fff'})
+        this.gasText = this.add.text(985, 680, 'fuel: 0', { fontSize: '20px Calibri bold', fill: '#fff'})
         // Adicionar as teclas de controle
         this.cursors = this.input.keyboard.createCursorKeys()
         this.mKey = this.input.keyboard.addKey('M')
@@ -176,14 +176,6 @@ export default class MainScene extends Phaser.Scene{
             return;
         }
 
-        //GASOLINA
-        if (this.cursors.up.isDown){
-            this.gasol -= 0.09;
-        }
-        else{
-            this.gasol -= 0.04;
-        }
-
         //GAME OVER DA GASOLINA
         if(this.gasol <= 0){
             var marcelo = `Ficaste sem gota, burro\nSó fizeste: ${this.score.toFixed(2)} Km \nCarrega no botão e tem uma surpresa`
@@ -193,6 +185,12 @@ export default class MainScene extends Phaser.Scene{
         if (this.mKey.isDown) {
             this.gasol = 100;
             this.gasText.setText('Fuel: ' + this.gasol);
+        }
+        else if (this.cursors.up.isDown){
+            this.gasol -= 0.099;
+        }
+        else{
+            this.gasol -= 0.049;
         }
 
         if (this.nKey.isDown) {
@@ -215,10 +213,12 @@ export default class MainScene extends Phaser.Scene{
 
         if (this.instructionsKey.isDown) {
             this.instructionsText.setVisible(false)
+            this.cheatCodeText.setVisible(true)
         }
 
         if (this.cheatCodeKey.isDown) {
-            this.cheatCodeText.setVisible(true)
+            this.instructionsText.setVisible(true)
+            this.cheatCodeText.setVisible(false)
         }
 
         this.player.body.allowGravity = false;
@@ -438,7 +438,7 @@ export default class MainScene extends Phaser.Scene{
         this.gasolGroup.add(barrilGas)
 
 
-        let dl= Phaser.Math.Between(5000,13500);
+        let dl= Phaser.Math.Between(4000,10000);
         this.GasEvent.delay = dl;
 
     }
@@ -456,7 +456,7 @@ export default class MainScene extends Phaser.Scene{
     adicionaGas(player, gas) {
         gas.destroy()
 
-        this.gasol = Math.min(this.gasol + 40, 100)
+        this.gasol = Math.min(this.gasol + 30, 100)
     }
 
     gameOver() {
