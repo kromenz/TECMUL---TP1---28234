@@ -80,6 +80,7 @@ export default class LoadScene extends Phaser.Scene {
         this.load.image('estradaGOD', 'assets/roadGOD.png');
         this.load.image('button', 'assets/spacebar.png');
         this.load.audio('buzina', 'assets/buzina.wav');
+        this.load.audio('godSom', 'assets/rocada.mp3');
         this.load.audio('acelerar', 'assets/acelerar.mp3'); 
     }
 

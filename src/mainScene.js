@@ -1,4 +1,5 @@
 export default class MainScene extends Phaser.Scene{
+    allSounds = []
     player
     cars
     gasText
@@ -24,19 +25,30 @@ export default class MainScene extends Phaser.Scene{
     road
     collisionPlayerCars
     collisionPlayerGas
+    godMusic
+    acelararSom
 
     constructor(){
         super({key : 'main'});
     }
 
     create(){
+
+        //Musica
+        this.godMusic = this.sound.add('godSom', { loop: true })
+
+        //Sons
+        this.acelararSom = this.sound.add('acelerar', { loop: true });
+
+        //Armazenar sons no array
+        this.allSounds.push(this.godMusic, this.acelararSom)
         //RESETAR VARIÁVEIS DEPOIS DO GAMEOVER
         this.score = 0;
         this.gasol = 0;
         this.gameOvar = false;
         this.collideCheat = 2;
 
-        this.godLikeText = this.add.text(320, 60, 'ESTÁS IMPARÁVEL\nGOD MODE ON' , { 
+        this.godLikeText = this.add.text(320, 20, 'ESTÁS IMPARÁVEL\nGOD MODE ON' , { 
             fontSize: '49px Georgia', 
             fill: '#ffa500',
             align: 'center',
@@ -178,6 +190,7 @@ export default class MainScene extends Phaser.Scene{
 
         //GAME OVER DA GASOLINA
         if(this.gasol <= 0){
+            this.godLikeText.setVisible(false)
             var marcelo = `Ficaste sem gota, burro\nSó fizeste: ${this.score.toFixed(2)} Km \nCarrega no botão e tem uma surpresa`
             this.gameOver2(marcelo);
         }
@@ -197,6 +210,7 @@ export default class MainScene extends Phaser.Scene{
             if(this.collideCheat != -1) {
                 this.collideCheat = -1
                 this.collisionPlayerCars?.destroy();
+                this.godMusic.play()
                 this.godLikeRoad.setVisible(true)
                 this.godLikeText.setVisible(true)
             }  
@@ -206,6 +220,7 @@ export default class MainScene extends Phaser.Scene{
             if(this.collideCheat != 2) {
                 this.collideCheat = 2;
                 this.collisionPlayerCars = this.physics.add.collider(this.player, this.cars, this.gameOver, null, this);
+                this.godMusic.stop()
                 this.godLikeRoad.setVisible(false)
                 this.godLikeText.setVisible(false)    
             }
@@ -222,27 +237,28 @@ export default class MainScene extends Phaser.Scene{
         }
 
         this.player.body.allowGravity = false;
+
         // Movimentar o carro do jogador com as teclas de controle
         if (this.cursors.up.isDown) {
-            this.player.setVelocityY(-300)
-            if(this.soundPlaying == false){
-                this.music = this.sound.add('acelerar', { loop: false });
-                this.music.play();
-                this.soundPlaying = true;
-            }
-        
+            this.player.setVelocityY(-300);
+            this.playSound(this.acelararSom);
         } else if (this.cursors.down.isDown) {
-            this.player.setVelocityY(150)
+            this.player.setVelocityY(150);
+            this.stopSound(this.acelararSom);
         } else if (this.cursors.right.isDown) {
-            this.player.setVelocityX(225)
+            this.player.setVelocityX(225);
+            this.stopSound(this.acelararSom);
         } else if (this.cursors.left.isDown) {
-            this.player.setVelocityX(-225)
+            this.player.setVelocityX(-225);
+            this.stopSound(this.acelararSom);
         } else {
             this.player.setVelocityY(-50);
             this.player.setVelocityX(0);
-            this.soundPlaying = false;
+            this.stopSound(this.acelararSom);
         }
+        
 
+        //MOVIMENTOS
         if (this.cursors.space.isDown){
             this.music = this.sound.add('buzina', { loop: false });
             this.music.play();
@@ -492,7 +508,12 @@ export default class MainScene extends Phaser.Scene{
         this.scoreEvent.remove(false);
         this.GasEvent.remove(false);
 
-        // Parar a movimentação dos carros
+        //Parar todos os sons
+        this.allSounds.forEach(sound => {
+            sound.stop();
+        });
+
+        // Parar a movimentação dos objetos
         this.player.setVelocityX(0);
         this.player.setVelocityY(0);
         this.cars.setVelocityY(0);
@@ -505,11 +526,26 @@ export default class MainScene extends Phaser.Scene{
         this.scoreEvent.remove(false);
         this.GasEvent.remove(false);
 
+        //Criar botão e mete lo interactive
         const botao = this.add.image(550, 690, 'button');
         botao.setScale(0.5)
         botao.setInteractive();
 
-        //Está a funcionar, mas só se clicar no botão, e reinicia o jogo na totalidade....
+        //Clicar no botão e recomeçar jogo
         botao.on('pointerup', function (event) { this.scene.start('load');}, this);
+    }
+
+    // reproduz o som especificado
+    playSound(sound) {
+        if (!sound.isPlaying) {
+            sound.play();
+        }
+    }
+
+    // interrompe a reprodução do som especificado
+    stopSound(sound) {
+        if (sound.isPlaying) {
+            sound.stop();
+        }
     }
 }
