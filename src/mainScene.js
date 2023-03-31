@@ -27,7 +27,26 @@ export default class MainScene extends Phaser.Scene{
         this.score = 0;
         this.gasol = 0;
         this.gameOvar = false;
-        this.collideCheat = false;
+        this.collideCheat = 0;
+
+        this.godLikeText = this.add.text(320, 60, 'ESTÁS IMPARÁVEL\nGOD MODE ON' , { 
+            fontSize: '49px Georgia', 
+            fill: '#ffa500',
+            align: 'center',
+            borderColor: '#fff',
+            borderWidth: 10,
+            padding: {
+                left: 10,
+                right: 10,
+                top: 5,
+                bottom: 5
+            },
+            shadowOffsetX: 5,
+            shadowOffsetY: 5,
+            shadowColor: '#FFF',
+            shadowBlur: 5
+        });
+        this.godLikeText.setVisible(false).setDepth(1)
         
         // Adicionar o fundo do jogo
         this.add.image(540, 360, 'estrada');
@@ -121,12 +140,13 @@ export default class MainScene extends Phaser.Scene{
 
         if (this.nKey.isDown) {
             this.collideCheat = 0;
-            this.godLike();
+            this.godLikeText.setVisible(true)
+            
         }
         
         if (this.bKey.isDown) {
             this.collideCheat = 1;
-            this.godLikeText.visible = false;
+            this.godLikeText.setVisible(false)
         }
 
         this.player.body.allowGravity = false;
@@ -359,27 +379,6 @@ export default class MainScene extends Phaser.Scene{
         else{
             this.gasol += 40;
         }
-    }
-
-    godLike(){
-        this.collideCheat = 0; 
-        const godLikeText = this.add.text(320, 60, 'ESTÁS IMPARÁVEL\nGOD MODE ON' , { 
-            fontSize: '49px Georgia', 
-            fill: '#ffa500',
-            align: 'center',
-            borderColor: '#fff',
-            borderWidth: 10,
-            padding: {
-                left: 10,
-                right: 10,
-                top: 5,
-                bottom: 5
-            },
-            shadowOffsetX: 5,
-            shadowOffsetY: 5,
-            shadowColor: '#FFF',
-            shadowBlur: 5
-        });
     }
 
     gameOver() {
