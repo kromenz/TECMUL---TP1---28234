@@ -1,13 +1,13 @@
 export default class MainScene extends Phaser.Scene{
     player;
     cars;
-    barrilGas;
     gasText;
     timerEvent;
     timerEvent2;
     timerEvent3;
     score
     gasol
+    gasolGroup
     scoreText;
     soundPlaying = false;
     gameOvar = false;
@@ -55,8 +55,8 @@ export default class MainScene extends Phaser.Scene{
         // Adicionar o fundo do jogo
         this.road = this.add.image(540, 360, 'estrada');
         //FUNDO ALTERNATIVO
-        /* this.godLikeRoad = this.add.image(540, 360, 'estradaGOD');
-        this.godLikeRoad.setVisible(false); */
+        this.godLikeRoad = this.add.image(540, 360, 'estradaGOD');
+        this.godLikeRoad.setVisible(false);
 
         // Adicionar o carro do jogador
         this.player = this.physics.add.sprite(560, 690, 'carroplayer');
@@ -65,6 +65,8 @@ export default class MainScene extends Phaser.Scene{
         
         // criar o grupo dos carros inimigos
         this.cars = this.physics.add.group();
+        this.gasolGroup = this.physics.add.group()
+        this.gasolGroup.setVelocityY(50)
                
         // Adicionar o texto da pontuação
         this.scoreText = this.add.text(985, 10, 'score: 0', { fontSize: '20px Calibri bold', fill: 'rgb(0, 51, 102)'});
@@ -77,7 +79,7 @@ export default class MainScene extends Phaser.Scene{
 
 
         this.collisionPlayerCars = this.physics.add.collider(this.player, this.cars, this.gameOver, null, this);
-        this.collisionPlayerGas = this.physics.add.collider(this.player, this.barrilGas, this.adicionaGas, null, this);
+        this.collisionPlayerGas = this.physics.add.collider(this.player, this.gasolGroup, this.adicionaGas, null, this);
         // Adicionar o evento de tempo para criar novos carros aleatoriamente
         this.timerEvent = this.time.addEvent({
             delay: 1000,
@@ -132,14 +134,12 @@ export default class MainScene extends Phaser.Scene{
 
         //GASOLINA
         if (this.cursors.up.isDown){
-            this.gasol -= 0.05;
+            this.gasol -= 0.09;
         }
         else{
-            this.gasol -= 0.031;
+            this.gasol -= 0.04;
         }
-        if(this.collisionPlayerGas){
-            
-        }
+
         //GAME OVER DA GASOLINA
         if(this.gasol <= 0){
             var marcelo = `Ficaste sem gota, burro\nSó fizeste: ${this.score.toFixed(2)} Km \nCarrega no botão e tem uma surpresa`
@@ -155,8 +155,7 @@ export default class MainScene extends Phaser.Scene{
             if(this.collideCheat != -1) {
                 this.collideCheat = -1
                 this.collisionPlayerCars?.destroy();
-                console.log(this.collideCheat)
-                /* this.godLikeRoad.setVisible(true) */
+                this.godLikeRoad.setVisible(true)
                 this.godLikeText.setVisible(true)
             }  
         }
@@ -165,7 +164,7 @@ export default class MainScene extends Phaser.Scene{
             if(this.collideCheat != 2) {
                 this.collideCheat = 2;
                 this.collisionPlayerCars = this.physics.add.collider(this.player, this.cars, this.gameOver, null, this);
-                /* this.godLikeRoad.setVisible(false) */
+                this.godLikeRoad.setVisible(false)
                 this.godLikeText.setVisible(false)    
             }
         }
@@ -210,6 +209,10 @@ export default class MainScene extends Phaser.Scene{
         this.cars.getChildren().forEach((child) => {
             child.setVelocityY(200 + (this.score / 10));
         })
+        this.gasolGroup.getChildren().forEach(function(barrilGas) {
+            barrilGas.setVelocityY(100); // Define a velocidade vertical do sprite
+        });
+
     }
 
     EventoDeTempo(del, evento){ //EM PROGRESSO
@@ -376,12 +379,11 @@ export default class MainScene extends Phaser.Scene{
                 break;
         }
         
-        this.barrilGas = this.physics.add.sprite(y, 0, 'gas');
-        this.barrilGas.setVelocityY(50);
-        this.barrilGas.setScale(0.1);
-        this.barrilGas.setCollideWorldBounds(true);
-        this.barrilGas.setBounce(1);
-        this.barrilGas.setCollideWorldBounds(false);
+        const barrilGas = this.physics.add.sprite(y, 0, 'gas');
+        barrilGas.setCollideWorldBounds(false);
+        barrilGas.setScale(0.1);
+        barrilGas.setBounce(1)
+        this.gasolGroup.add(barrilGas)
 
 
         let dl= Phaser.Math.Between(5000,13500);
@@ -401,12 +403,8 @@ export default class MainScene extends Phaser.Scene{
 
     adicionaGas(player, gas) {
         gas.destroy()
-        if(this.gasol >= 60){
-            this.gasol = 100;
-        }
-        else{
-            this.gasol += 40;
-        }
+
+        this.gasol = Math.min(this.gasol + 40, 100)
     }
 
     gameOver() {
@@ -447,6 +445,8 @@ export default class MainScene extends Phaser.Scene{
         this.player.setVelocityY(0);
         this.cars.setVelocityY(0);
         this.cars.setVelocityX(0);
+        this.gasolGroup.setVelocityY(0)
+        this.gasolGroup.setVelocityX(0)
         this.timerEvent.remove(false);
         this.timerEvent2.remove(false);
         this.timerEvent3.remove(false);
