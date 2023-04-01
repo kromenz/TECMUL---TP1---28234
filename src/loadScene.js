@@ -4,7 +4,6 @@ export default class LoadScene extends Phaser.Scene {
     }
 
     preload() {
-
         /********* loading bar *********/
         var progressBar = this.add.graphics();
         var progressBox = this.add.graphics();
