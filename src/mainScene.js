@@ -35,13 +35,19 @@ export default class MainScene extends Phaser.Scene{
     create(){
 
         //Musica
+        this.defaultMusic = this.sound.add('defaultSom', { loop: true })
         this.godMusic = this.sound.add('godSom', { loop: true })
-
+        this.defaultMusic.volume = 0.05;
+        this.defaultMusic.play()
+        
         //Sons
         this.acelararSom = this.sound.add('acelerar', { loop: true });
+        this.acelararSom.volume = 0.25;
+        this.collectGas = this.sound.add('coletarGas',{ loop: false});
+        this.collectGas.volume = 0.25;
 
         //Armazenar sons no array
-        this.allSounds.push(this.godMusic, this.acelararSom)
+        this.allSounds.push(this.godMusic, this.acelararSom,this.defaultMusic)
         //RESETAR VARIÁVEIS DEPOIS DO GAMEOVER
         this.score = 0;
         this.gasol = 0;
@@ -210,6 +216,7 @@ export default class MainScene extends Phaser.Scene{
             if(this.collideCheat != -1) {
                 this.collideCheat = -1
                 this.collisionPlayerCars?.destroy();
+                this.defaultMusic.volume = 0;
                 this.godMusic.play()
                 this.godLikeRoad.setVisible(true)
                 this.godLikeText.setVisible(true)
@@ -221,6 +228,7 @@ export default class MainScene extends Phaser.Scene{
                 this.collideCheat = 2;
                 this.collisionPlayerCars = this.physics.add.collider(this.player, this.cars, this.gameOver, null, this);
                 this.godMusic.stop()
+                this.defaultMusic.volume = 0.05;
                 this.godLikeRoad.setVisible(false)
                 this.godLikeText.setVisible(false)    
             }
@@ -299,7 +307,7 @@ export default class MainScene extends Phaser.Scene{
         if (transito != 1){
             
             let lane = Phaser.Math.Between(1,6)  
-            while (lane == this.verificalane[this.verificalane.length-1]){
+            while (lane == this.verificalane[this.verificalane.length-1]|| lane == this.verificalane[this.verificalane.length-2]){
                 lane = Phaser.Math.Between(1,6);
             }
             this.verificalane.push(lane);
@@ -448,8 +456,17 @@ export default class MainScene extends Phaser.Scene{
         }
         
         const barrilGas = this.physics.add.sprite(y, 0, 'gas');
+
+        this.anims.create({
+            key: 'gasmov',
+            frames: this.anims.generateFrameNumbers('gas', { start: 0, end: 3 }),
+            frameRate: 6,
+            repeat: -1
+        });
+
+        barrilGas.anims.play('gasmov', true);
         barrilGas.setCollideWorldBounds(false);
-        barrilGas.setScale(0.1);
+        barrilGas.setScale(0.15);
         barrilGas.setBounce(1)
         this.gasolGroup.add(barrilGas)
 
@@ -471,6 +488,8 @@ export default class MainScene extends Phaser.Scene{
 
     adicionaGas(player, gas) {
         gas.destroy()
+
+        this.collectGas.play()
 
         this.gasol = Math.min(this.gasol + 30, 100)
     }
@@ -512,6 +531,8 @@ export default class MainScene extends Phaser.Scene{
         this.allSounds.forEach(sound => {
             sound.stop();
         });
+        this.defaultMusic.stop()
+
 
         // Parar a movimentação dos objetos
         this.player.setVelocityX(0);
