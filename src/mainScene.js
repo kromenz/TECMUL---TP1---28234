@@ -190,7 +190,7 @@ export default class MainScene extends Phaser.Scene{
         });
 
         this.GasEvent = this.time.addEvent({
-            delay: 15000,
+            delay: 1500,
             callback: this.EventoGas,
             callbackScope: this,
             loop: true
@@ -217,10 +217,10 @@ export default class MainScene extends Phaser.Scene{
             this.gasText.setText('Fuel: ' + this.gasol);
         }
         else if (this.cursors.up.isDown){
-            this.gasol -= 0.099;
+            this.gasol -= 0.13;
         }
         else{
-            this.gasol -= 0.049;
+            this.gasol -= 0.065;
         }
 
         if (this.nKey.isDown) {
