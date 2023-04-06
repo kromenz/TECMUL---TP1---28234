@@ -123,6 +123,16 @@ export default class MainScene extends Phaser.Scene{
         this.player.setScale(0.275)
 
 
+        this.skysprite = this.physics.add.sprite(0,0, 'skysprite')
+        this.skysprite.setCollideWorldBounds(true);
+        this.anims.create({
+            key: 'backMov',
+            frames: this.anims.generateFrameNumbers('skysprite', { start: 0, end: 11 }),
+            frameRate:8,
+            repeat: -1
+        });
+        this.skysprite.anims.play('backMov', true);
+
         // criar o grupo dos carros inimigos
         this.cars = this.physics.add.group()
         this.gasolGroup = this.physics.add.group()
@@ -221,6 +231,7 @@ export default class MainScene extends Phaser.Scene{
                 this.godMusic.play()
                 this.godLikeRoad.setVisible(true)
                 this.godLikeText.setVisible(true)
+                this.skysprite.destroy()
             }  
         }
         
@@ -231,7 +242,17 @@ export default class MainScene extends Phaser.Scene{
                 this.godMusic.stop()
                 this.defaultMusic.volume = 0.05;
                 this.godLikeRoad.setVisible(false)
-                this.godLikeText.setVisible(false)    
+                this.godLikeText.setVisible(false)
+                
+                this.skysprite = this.physics.add.sprite(0,0, 'skysprite')
+                this.skysprite.setCollideWorldBounds(true);
+                this.anims.create({
+                    key: 'backMov',
+                    frames: this.anims.generateFrameNumbers('skysprite', { start: 0, end: 11 }),
+                    frameRate:8,
+                    repeat: -1
+                });
+                this.skysprite.anims.play('backMov', true);
             }
         }
 

@@ -76,6 +76,7 @@ export default class LoadScene extends Phaser.Scene {
         this.load.spritesheet('gas', 'assets/gassprite.png', { frameWidth: 360, frameHeight: 348 });
         this.load.spritesheet('camiao', 'assets/camiao.png', { frameWidth: 120, frameHeight: 239 });
         this.load.spritesheet('carroinimigo3', 'assets/vermelho.png', { frameWidth: 58, frameHeight: 88 });
+        this.load.spritesheet('skysprite', 'assets/skysprite.png', { frameWidth: 1080, frameHeight: 720 });
         this.load.image('estrada', 'assets/sky.png');
         this.load.image('estradaGOD', 'assets/roadGOD.png');
         this.load.image('button', 'assets/spacebar.png');
