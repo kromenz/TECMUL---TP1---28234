@@ -121,7 +121,8 @@ export default class MainScene extends Phaser.Scene{
         this.player = this.physics.add.sprite(560, 690, 'carroplayer')
         this.player.setCollideWorldBounds(true);
         this.player.setScale(0.275)
-        
+
+
         // criar o grupo dos carros inimigos
         this.cars = this.physics.add.group()
         this.gasolGroup = this.physics.add.group()
@@ -246,12 +247,13 @@ export default class MainScene extends Phaser.Scene{
 
         this.player.body.allowGravity = false;
 
+
         // Movimentar o carro do jogador com as teclas de controle
         if (this.cursors.up.isDown) {
             this.player.setVelocityY(-300);
             this.playSound(this.acelararSom);
         } else if (this.cursors.down.isDown) {
-            this.player.setVelocityY(150);
+            this.player.setVelocityY(175);
             this.stopSound(this.acelararSom);
         } else if (this.cursors.right.isDown) {
             this.player.setVelocityX(225);
@@ -260,7 +262,7 @@ export default class MainScene extends Phaser.Scene{
             this.player.setVelocityX(-225);
             this.stopSound(this.acelararSom);
         } else {
-            this.player.setVelocityY(-50);
+            this.player.setVelocityY(-25);
             this.player.setVelocityX(0);
             this.stopSound(this.acelararSom);
         }
@@ -283,8 +285,13 @@ export default class MainScene extends Phaser.Scene{
         this.gasText.setText('Fuel: ' + this.gasol.toFixed())
         // Acelerar os carros inimigos à medida que o jogo avança
         this.cars.getChildren().forEach((child) => {
-            child.setVelocityY(200 + (this.score / 10));
-        })
+            if (child.x >= 235 && child.x <= 515) {
+              child.setVelocityY(275 + (this.score) * 6); // velocidade maior para carros na faixa de X
+            } else {
+              child.setVelocityY(200 + (this.score) * 6); // velocidade normal para outros carros
+            }
+          });
+          
         this.gasolGroup.getChildren().forEach(function(barrilGas) {
             barrilGas.setVelocityY(100); // Define a velocidade vertical do sprite
         });
@@ -311,7 +318,7 @@ export default class MainScene extends Phaser.Scene{
                 lane = Phaser.Math.Between(1,6);
             }
             this.verificalane.push(lane);
-            let c = Phaser.Math.Between(1, 14);
+            let c = Phaser.Math.Between(1, 40);
             let y;
             //252 360 486 612 738 846
             switch (lane){
@@ -361,23 +368,55 @@ export default class MainScene extends Phaser.Scene{
                     frameRate: 10,
                     repeat: -1
                 });
-
                 this.car.anims.play('sirene', true);
 
 
-                this.car.setScale(0.875);
-            } else if (c>1 && c<6) {
+                if (lane === 1 || lane === 2 || lane === 3) {
+                    this.car.setAngle(180); // inverte a sprite horizontalmente
+                  } else {
+                    this.car.setAngle(0); // mantém a escala normal
+                  }
+                  this.car.setScale(0.875);
+            } else if (c>=1 && c<6) {
                 this.car = this.cars.create(y+y2, 0, 'carroinimigo');
-                this.car.setScale(0.275);
-            } else if (c>=6 && c<11){
+                if (lane === 1 || lane === 2 || lane === 3) {
+                    this.car.setAngle(180); // inverte a sprite horizontalmente
+                  } else {
+                    this.car.setAngle(0); // mantém a escala normal
+                  }
+                  this.car.setScale(0.275);
+            } else if (c>=6 && c<16){
                 this.car = this.cars.create(y+y2, 0, 'carroinimigo2');
-                this.car.setScale(0.9);
-            }else if (c>=11 && c<13){
+                if (lane === 1 || lane === 2 || lane === 3) {
+                    this.car.setAngle(180); // inverte a sprite horizontalmente
+                  } else {
+                    this.car.setAngle(0); // mantém a escala normal
+                  }
+                  this.car.setScale(0.9);
+            }else if (c>=16 && c<23){
                 this.car = this.cars.create(y+y2, 0, 'motainimiga');
-                this.car.setScale(0.8);
-            }else{
+                if (lane === 1 || lane === 2 || lane === 3) {
+                    this.car.setAngle(180); // inverte a sprite horizontalmente
+                  } else {
+                    this.car.setAngle(0); // mantém a escala normal
+                  }
+                  this.car.setScale(0.8);
+            }else if(c>=23 && c<30){
                 this.car = this.cars.create(y+y2, 0, 'camiao');
-                this.car.setScale(0.7);
+                if (lane === 1 || lane === 2 || lane === 3) {
+                    this.car.setAngle(180); // inverte a sprite horizontalmente
+                  } else {
+                    this.car.setAngle(0); // mantém a escala normal
+                  }
+                  this.car.setScale(0.7);
+            }else{
+                this.car = this.cars.create(y+y2, 0, 'carroinimigo3');
+                if (lane === 1 || lane === 2 || lane === 3) {
+                    this.car.setAngle(180); // inverte a sprite horizontalmente
+                  } else {
+                    this.car.setAngle(0); // mantém a escala normal
+                  }
+                  this.car.setScale(0.9);
             }
             this.car.setCollideWorldBounds(true);
             this.car.setBounce(1);
