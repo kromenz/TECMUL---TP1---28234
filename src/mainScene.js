@@ -34,6 +34,12 @@ export default class MainScene extends Phaser.Scene{
 
     create(){
 
+        //RESETAR VARIÁVEIS DEPOIS DO GAMEOVER
+        this.score = 0;
+        this.gasol = 0;
+        this.gameOvar = false;
+        this.collideCheat = 2;
+
         //Musica
         this.defaultMusic = this.sound.add('defaultSom', { loop: true })
         this.godMusic = this.sound.add('godSom', { loop: true })
@@ -47,12 +53,7 @@ export default class MainScene extends Phaser.Scene{
         this.collectGas.volume = 0.25;
 
         //Armazenar sons no array
-        this.allSounds.push(this.godMusic, this.acelararSom,this.defaultMusic)
-        //RESETAR VARIÁVEIS DEPOIS DO GAMEOVER
-        this.score = 0;
-        this.gasol = 0;
-        this.gameOvar = false;
-        this.collideCheat = 2;
+        this.allSounds.push(this.godMusic, this.acelararSom, this.defaultMusic)
 
         this.godLikeText = this.add.text(320, 20, 'ESTÁS IMPARÁVEL\nGOD MODE ON' , { 
             fontSize: '49px Georgia', 
@@ -119,7 +120,7 @@ export default class MainScene extends Phaser.Scene{
 
         // Adicionar o carro do jogador
         this.player = this.physics.add.sprite(560, 690, 'carroplayer')
-        this.player.setCollideWorldBounds(true);
+        this.player.setCollideWorldBounds(true)
         this.player.setScale(0.275)
 
 
@@ -200,7 +201,6 @@ export default class MainScene extends Phaser.Scene{
     }
 
     update (){
-
         if(this.gameOvar){  
             return;
         }
@@ -268,7 +268,6 @@ export default class MainScene extends Phaser.Scene{
 
         this.player.body.allowGravity = false;
 
-
         // Movimentar o carro do jogador com as teclas de controle
         if (this.cursors.up.isDown) {
             this.player.setVelocityY(-300);
@@ -288,7 +287,6 @@ export default class MainScene extends Phaser.Scene{
             this.stopSound(this.acelararSom);
         }
         
-
         //MOVIMENTOS
         if (this.cursors.space.isDown){
             this.music = this.sound.add('buzina', { loop: false });
@@ -329,7 +327,6 @@ export default class MainScene extends Phaser.Scene{
     }
 
     createCar() {
-
         // Escolher uma via aleatória para adicionar o carro inimigo
         let transito = Phaser.Math.Between(1, 6);
         if (transito != 1){
@@ -382,7 +379,6 @@ export default class MainScene extends Phaser.Scene{
             // Adicionar o carro inimigo na posição aleatória
             if (c==1){
                 this.car = this.cars.create(y+y2, 0, 'ambuinimiga');
-
                 this.anims.create({
                     key: 'sirene',
                     frames: this.anims.generateFrameNumbers('ambuinimiga', { start: 0, end: 3 }),
@@ -390,7 +386,6 @@ export default class MainScene extends Phaser.Scene{
                     repeat: -1
                 });
                 this.car.anims.play('sirene', true);
-
 
                 if (lane === 1 || lane === 2 || lane === 3) {
                     this.car.setAngle(180); // inverte a sprite horizontalmente
@@ -491,7 +486,6 @@ export default class MainScene extends Phaser.Scene{
 
     EventoGas(){
         let lane = Phaser.Math.Between(1, 6);
-
         let y;
         //252 360 486 612 738 846
         switch (lane){
@@ -514,26 +508,21 @@ export default class MainScene extends Phaser.Scene{
                 y=870;
                 break;
         }
-        
         const barrilGas = this.physics.add.sprite(y, 0, 'gas');
-
         this.anims.create({
             key: 'gasmov',
             frames: this.anims.generateFrameNumbers('gas', { start: 0, end: 3 }),
             frameRate: 6,
             repeat: -1
         });
-
         barrilGas.anims.play('gasmov', true);
         barrilGas.setCollideWorldBounds(false);
         barrilGas.setScale(0.15);
         barrilGas.setBounce(1)
         this.gasolGroup.add(barrilGas)
 
-
         let dl= Phaser.Math.Between(4000,10000);
         this.GasEvent.delay = dl;
-
     }
     
     VerificaLane (lane){
@@ -548,7 +537,6 @@ export default class MainScene extends Phaser.Scene{
 
     adicionaGas(player, gas) {
         gas.destroy()
-
         this.collectGas.play()
 
         this.gasol = Math.min(this.gasol + 30, 100)
@@ -561,7 +549,6 @@ export default class MainScene extends Phaser.Scene{
 
     gameOver2(text = '') {
         this.gameOvar = true;
-
         // Mostrar a mensagem de fim de jogo
         const gameOverText = this.add.text(170, 160, text , { 
             fontSize: '49px Georgia', 
@@ -580,20 +567,16 @@ export default class MainScene extends Phaser.Scene{
             shadowColor: '#FFF',
             shadowBlur: 5
         });
-
         this.timerEvent.remove(false);
         this.timerEvent2.remove(false);
         this.timerEvent3.remove(false);
         this.scoreEvent.remove(false);
         this.GasEvent.remove(false);
-
         //Parar todos os sons
         this.allSounds.forEach(sound => {
             sound.stop();
         });
         this.defaultMusic.stop()
-
-
         // Parar a movimentação dos objetos
         this.player.setVelocityX(0);
         this.player.setVelocityY(0);
