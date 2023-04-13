@@ -142,6 +142,7 @@ export default class MainScene extends Phaser.Scene{
         // Adicionar o texto da pontuação
         this.scoreText = this.add.text(985, 10, 'score: 0', { fontSize: '20px Calibri bold', fill: '#fff'})
         this.gasText = this.add.text(985, 680, 'fuel: 0', { fontSize: '20px Calibri bold', fill: '#fff'})
+        this.scoreText.setDepth(1)
         // Adicionar as teclas de controle
         this.cursors = this.input.keyboard.createCursorKeys()
         this.mKey = this.input.keyboard.addKey('M')
